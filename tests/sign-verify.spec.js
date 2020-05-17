@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const {Ed25519KeyPair} = require('..');
+const Ed25519KeyPair = require('..');
 const mockKey = require('./mock-key');
 
 const keyPair = new Ed25519KeyPair({
