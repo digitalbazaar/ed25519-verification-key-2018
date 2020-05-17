@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2019 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
 'use strict';
 
@@ -8,6 +8,9 @@ const forge = require('node-forge');
 const {pki: {ed25519}, util: {binary: {base58}}} = forge;
 const util = require('./util');
 const {LDVerifierKeyPair} = require('crypto-ld');
+
+const SUITE_ID = 'Ed25519VerificationKey2018';
+const KEY_TYPE = 'ed25519';
 
 class Ed25519KeyPair extends LDVerifierKeyPair {
   /* eslint-disable max-len */
@@ -36,7 +39,7 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
   /* eslint-enable */
   constructor(options = {}) {
     super(options);
-    this.type = 'Ed25519VerificationKey2018';
+    this.type = SUITE_ID;
     this.publicKeyBase58 = options.publicKeyBase58;
     if(!this.publicKeyBase58) {
       throw new TypeError('The "publicKeyBase58" property is required.');
@@ -514,6 +517,7 @@ function ed25519VerifierFactory(key) {
   };
 }
 
-module.exports = {
-  Ed25519KeyPair
-};
+Ed25519KeyPair.suite = SUITE_ID;
+Ed25519KeyPair.keyType = KEY_TYPE;
+
+module.exports = Ed25519KeyPair;

@@ -4,8 +4,7 @@
 'use strict';
 
 const chai = require('chai');
-const should = chai.should();
-const {expect} = chai;
+chai.should();
 
 const {util: {binary: {base58}}} = require('node-forge');
 const {base58Decode, privateKeyDerEncode, publicKeyDerEncode} =
