@@ -195,32 +195,19 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
     });
   }
   /**
-   * Creates an Ed25519 Key Pair from an existing private key.
+   * Creates an Ed25519 Key Pair from an existing serialized key pair.
    * @example
-   * > const options = {
-   *   privateKeyBase58: privateKey
-   * };
-   * > const key = await Ed25519KeyPair.from(options);
-   * > key
-   * Ed25519KeyPair { ...
-   * @param {object} options - Contains a private key.
-   * @param {string} [options.privateKey] - A private key object.
-   * @param {string} [options.privateKeyBase58] - A Base58
-   * Private key string.
+   * > const keyPair = await Ed25519KeyPair.from({
+   *     controller: 'did:ex:1234',
+   *     type: 'Ed25519VerificationKey2018',
+   *     publicKeyBase58,
+   *     privateKeyBase58
+   *   });
    *
-   * @returns {Ed25519KeyPair} An Ed25519 Key Pair.
+   * @returns {Promise<Ed25519KeyPair>} An Ed25519 Key Pair.
    */
   static async from(options) {
-    const privateKeyBase58 = options.privateKeyBase58 ||
-      // legacy privateDidDoc format
-      (options.privateKey && options.privateKey.privateKeyBase58);
-    const keyPair = new Ed25519KeyPair({
-      privateKeyBase58,
-      type: options.type || options.keyType, // Todo: deprecate keyType usage
-      ...options
-    });
-
-    return keyPair;
+    return new Ed25519KeyPair({options});
   }
 
   /* eslint-disable max-len */
