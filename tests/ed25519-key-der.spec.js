@@ -54,7 +54,7 @@ describe('Ed25519 Keys', () => {
 /*
 async function _generateTestVector() {
   const {createPublicKey} = require('crypto');
-  const _privateKey = require('../lib/ed25519PrivateKeyNode12');
+  const _privateKey = require('../src/ed25519PrivateKeyNode12');
 
   // create a node private key
   const privateKey = _privateKey.create({privateKeyBytes});
