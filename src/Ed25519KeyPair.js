@@ -207,7 +207,7 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
    * @returns {Promise<Ed25519KeyPair>} An Ed25519 Key Pair.
    */
   static async from(options) {
-    return new Ed25519KeyPair({options});
+    return new Ed25519KeyPair(options);
   }
 
   /* eslint-disable max-len */
