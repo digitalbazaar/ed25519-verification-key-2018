@@ -42,11 +42,13 @@ describe('Ed25519KeyPair', () => {
     });
   });
 
-  describe('exportFull', () => {
+  describe('export', () => {
     it('should export id, type and key material', async () => {
       const keyPair = await Ed25519KeyPair.generate({type});
       keyPair.id = '#test-id';
-      const exported = await keyPair.exportFull();
+      const exported = await keyPair.export({
+        publicKey: true, privateKey: true
+      });
 
       expect(exported.id).to.equal('#test-id');
       expect(exported.type).to.equal(type);
@@ -233,10 +235,13 @@ describe('Ed25519KeyPair', () => {
     it('should round-trip load exported keys', async () => {
       const keyPair = await Ed25519KeyPair.generate({type});
       keyPair.id = '#test-id';
-      const exported = await keyPair.exportFull();
+      const exported = await keyPair.export({
+        publicKey: true, privateKey: true
+      });
       const imported = await Ed25519KeyPair.from(exported);
 
-      expect(await imported.exportFull()).to.eql(exported);
+      expect(await imported.export({publicKey: true, privateKey: true}))
+        .to.eql(exported);
     });
 
     it('should load from exported key storage format', async () => {
