@@ -164,23 +164,6 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
         ...options
       });
     }
-    if(env.nodejs) {
-      // TODO: use native node crypto api once it's available
-      const sodium = require('sodium-native');
-      const bs58 = require('bs58');
-      const publicKey = new Buffer.alloc(sodium.crypto_sign_PUBLICKEYBYTES);
-      const privateKey = new Buffer.alloc(sodium.crypto_sign_SECRETKEYBYTES);
-      if('seed' in options) {
-        sodium.crypto_sign_seed_keypair(publicKey, privateKey, options.seed);
-      } else {
-        sodium.crypto_sign_keypair(publicKey, privateKey);
-      }
-      return new Ed25519VerificationKey2018({
-        publicKeyBase58: bs58.encode(publicKey),
-        privateKeyBase58: bs58.encode(privateKey),
-        ...options
-      });
-    }
 
     const generateOptions = {};
     if('seed' in options) {
@@ -407,25 +390,6 @@ function ed25519SignerFactory(key) {
       }
     };
   }
-  if(env.nodejs) {
-    const sodium = require('sodium-native');
-    const bs58 = require('bs58');
-    const privateKey = util.base58Decode({
-      decode: bs58.decode,
-      keyMaterial: key.privateKeyBase58,
-      type: 'private'
-    });
-    return {
-      async sign({data}) {
-        const signature = Buffer.alloc(sodium.crypto_sign_BYTES);
-        await sodium.crypto_sign_detached(
-          signature,
-          Buffer.from(data.buffer, data.byteOffset, data.length),
-          privateKey);
-        return signature;
-      }
-    };
-  }
 
   // browser implementation
   const privateKey = util.base58Decode({
@@ -470,23 +434,6 @@ function ed25519VerifierFactory(key) {
         return verify(
           null, Buffer.from(data.buffer, data.byteOffset, data.length),
           publicKey, signature);
-      }
-    };
-  }
-  if(env.nodejs) {
-    const sodium = require('sodium-native');
-    const bs58 = require('bs58');
-    const publicKey = util.base58Decode({
-      decode: bs58.decode,
-      keyMaterial: key.publicKeyBase58,
-      type: 'public'
-    });
-    return {
-      async verify({data, signature}) {
-        return sodium.crypto_sign_verify_detached(
-          Buffer.from(signature.buffer, signature.byteOffset, signature.length),
-          Buffer.from(data.buffer, data.byteOffset, data.length),
-          publicKey);
       }
     };
   }
