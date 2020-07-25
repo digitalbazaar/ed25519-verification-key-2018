@@ -17,7 +17,7 @@
     "email": "support@digitalbazaar.com"
   },
   "license": "BSD-3-Clause",
-  "main": "src/Ed25519KeyPair.js",
+  "main": "src/Ed25519VerificationKey2018.js",
   "files": [
     "src/*.js"
   ],

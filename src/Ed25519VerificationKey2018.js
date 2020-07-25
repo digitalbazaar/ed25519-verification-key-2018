@@ -10,9 +10,8 @@ const util = require('./util');
 const {LDVerifierKeyPair} = require('crypto-ld');
 
 const SUITE_ID = 'Ed25519VerificationKey2018';
-const KEY_TYPE = 'ed25519';
 
-class Ed25519KeyPair extends LDVerifierKeyPair {
+class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
   /* eslint-disable max-len */
   /**
    * An implementation of
@@ -27,9 +26,9 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
    *   publicKeyBase58: 'GycSSui454dpYRKiFdsQ5uaE8Gy3ac6dSMPcAoQsk8yq',
    *   privateKeyBase58
    * };
-   * > const EDKey = new Ed25519KeyPair(options);
+   * > const EDKey = new Ed25519VerificationKey2018(options);
    * > EDKey
-   * Ed25519KeyPair { ...
+   * Ed25519VerificationKey2018 { ...
    * @param {object} options - Options hashmap.
    * @param {string} options.publicKeyBase58 - Base58 encoded Public Key
    *   (unencoded is 32-bytes).
@@ -83,7 +82,7 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
 
     // buffer is: 0xed 0x01 <public key bytes>
     if(buffer[0] === 0xed && buffer[1] === 0x01) {
-      return new Ed25519KeyPair({
+      return new Ed25519VerificationKey2018({
         publicKeyBase58: base58.encode(buffer.slice(2))
       });
     }
@@ -94,15 +93,15 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
   /**
    * Generates a KeyPair with an optional deterministic seed.
    * @example
-   * > const keyPair = await Ed25519KeyPair.generate();
+   * > const keyPair = await Ed25519VerificationKey2018.generate();
    * > keyPair
-   * Ed25519KeyPair { ...
+   * Ed25519VerificationKey2018 { ...
    * @param {object} [options={}] - See LDKeyPair
    * docstring for full list.
    * @param {Uint8Array|Buffer} [options.seed] -
    * a 32-byte array seed for a deterministic key.
    *
-   * @returns {Promise<Ed25519KeyPair>} Generates a key pair.
+   * @returns {Promise<Ed25519VerificationKey2018>} Generates a key pair.
    */
   static async generate(options = {}) {
     if(env.nodejs && require('semver').gte(process.version, '12.0.0')) {
@@ -126,7 +125,7 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
         const {privateKeyBytes} = privateKeyFromAsn1(
           asn1.fromDer(new ByteBuffer(privateKey)));
 
-        return new Ed25519KeyPair({
+        return new Ed25519VerificationKey2018({
           publicKeyBase58: bs58.encode(publicKeyBytes),
           // private key is the 32 byte private key + 32 byte public key
           privateKeyBase58: bs58.encode(Buffer.concat(
@@ -157,7 +156,7 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
       const {privateKeyBytes} = privateKeyFromAsn1(
         asn1.fromDer(new ByteBuffer(privateKey.export(privateKeyEncoding))));
 
-      return new Ed25519KeyPair({
+      return new Ed25519VerificationKey2018({
         publicKeyBase58: bs58.encode(publicKeyBytes),
         // private key is the 32 byte private key + 32 byte public key
         privateKeyBase58: bs58.encode(Buffer.concat(
@@ -176,7 +175,7 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
       } else {
         sodium.crypto_sign_keypair(publicKey, privateKey);
       }
-      return new Ed25519KeyPair({
+      return new Ed25519VerificationKey2018({
         publicKeyBase58: bs58.encode(publicKey),
         privateKeyBase58: bs58.encode(privateKey),
         ...options
@@ -188,7 +187,7 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
       generateOptions.seed = options.seed;
     }
     const {publicKey, privateKey} = ed25519.generateKeyPair(generateOptions);
-    return new Ed25519KeyPair({
+    return new Ed25519VerificationKey2018({
       publicKeyBase58: base58.encode(publicKey),
       privateKeyBase58: base58.encode(privateKey),
       ...options
@@ -197,17 +196,17 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
   /**
    * Creates an Ed25519 Key Pair from an existing serialized key pair.
    * @example
-   * > const keyPair = await Ed25519KeyPair.from({
+   * > const keyPair = await Ed25519VerificationKey2018.from({
    *     controller: 'did:ex:1234',
    *     type: 'Ed25519VerificationKey2018',
    *     publicKeyBase58,
    *     privateKeyBase58
    *   });
    *
-   * @returns {Promise<Ed25519KeyPair>} An Ed25519 Key Pair.
+   * @returns {Promise<Ed25519VerificationKey2018>} An Ed25519 Key Pair.
    */
   static async from(options) {
-    return new Ed25519KeyPair(options);
+    return new Ed25519VerificationKey2018(options);
   }
 
   /* eslint-disable max-len */
@@ -307,7 +306,7 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
    */
   fingerprint() {
     const {publicKeyBase58} = this;
-    return Ed25519KeyPair.fingerprintFromPublicKey({publicKeyBase58});
+    return Ed25519VerificationKey2018.fingerprintFromPublicKey({publicKeyBase58});
   }
 
   /**
@@ -368,7 +367,7 @@ class Ed25519KeyPair extends LDVerifierKeyPair {
  * Returns an object with an async sign function.
  * The sign function is bound to the KeyPair
  * and then returned by the KeyPair's signer method.
- * @param {Ed25519KeyPair} key - An ED25519KeyPair.
+ * @param {Ed25519VerificationKey2018} key - A key par instance.
  * @example
  * > const mySigner = ed25519SignerFactory(edKeyPair);
  * > await mySigner.sign({data})
@@ -445,7 +444,7 @@ function ed25519SignerFactory(key) {
  * Returns an object with an async verify function.
  * The verify function is bound to the KeyPair
  * and then returned by the KeyPair's verifier method.
- * @param {Ed25519KeyPair} key - An Ed25519KeyPair.
+ * @param {Ed25519VerificationKey2018} key - An Ed25519VerificationKey2018.
  * @example
  * > const myVerifier = ed25519Verifier(edKeyPair);
  * > await myVerifier.verify({data, signature});
@@ -504,7 +503,8 @@ function ed25519VerifierFactory(key) {
   };
 }
 
-Ed25519KeyPair.suite = SUITE_ID;
-Ed25519KeyPair.keyType = KEY_TYPE;
+Ed25519VerificationKey2018.suite = SUITE_ID;
 
-module.exports = Ed25519KeyPair;
+module.exports = {
+  Ed25519VerificationKey2018
+};

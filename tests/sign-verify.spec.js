@@ -3,10 +3,10 @@
  */
 'use strict';
 
-const Ed25519KeyPair = require('..');
+const {Ed25519VerificationKey2018} = require('..');
 const mockKey = require('./mock-key');
 
-const keyPair = new Ed25519KeyPair({
+const keyPair = new Ed25519VerificationKey2018({
   publicKeyBase58: mockKey.publicKeyBase58,
   privateKeyBase58: mockKey.privateKeyBase58
 });
