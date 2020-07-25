@@ -14,9 +14,9 @@ const should = chai.should();
 
 const {expect} = chai;
 
-const Ed25519KeyPair = require('..');
+const {Ed25519VerificationKey2018} = require('..');
 
-describe('Ed25519KeyPair', () => {
+describe('Ed25519VerificationKey2018', () => {
   const type = 'Ed25519VerificationKey2018';
 
   describe('constructor', () => {
@@ -24,7 +24,7 @@ describe('Ed25519KeyPair', () => {
       const {publicKeyBase58} = mockKey;
       const controller = 'did:example:1234';
 
-      const keyPair = new Ed25519KeyPair({controller, publicKeyBase58});
+      const keyPair = new Ed25519VerificationKey2018({controller, publicKeyBase58});
       expect(keyPair.id).to.equal(
         'did:example:1234#z6Mks8wJbzhWdmkQZgw7z2qHwaxPVnFsFmEZSXzGkLkvhMvL');
     });
@@ -32,7 +32,7 @@ describe('Ed25519KeyPair', () => {
     it('should error if publicKeyBase58 property is missing', async () => {
       let error;
       try {
-        new Ed25519KeyPair({});
+        new Ed25519VerificationKey2018({});
       } catch(e) {
         error = e;
       }
@@ -44,7 +44,7 @@ describe('Ed25519KeyPair', () => {
 
   describe('export', () => {
     it('should export id, type and key material', async () => {
-      const keyPair = await Ed25519KeyPair.generate({type});
+      const keyPair = await Ed25519VerificationKey2018.generate({type});
       keyPair.id = '#test-id';
       const exported = await keyPair.export({
         publicKey: true, privateKey: true
@@ -62,7 +62,7 @@ describe('Ed25519KeyPair', () => {
       let ldKeyPair;
       let error;
       try {
-        ldKeyPair = await Ed25519KeyPair.generate({type});
+        ldKeyPair = await Ed25519VerificationKey2018.generate();
       } catch(e) {
         error = e;
       }
@@ -77,8 +77,8 @@ describe('Ed25519KeyPair', () => {
     it('should generate the same key from the same seed', async () => {
       const seed = new Uint8Array(32);
       seed.fill(0x01);
-      const keyPair1 = await Ed25519KeyPair.generate({type, seed});
-      const keyPair2 = await Ed25519KeyPair.generate({type, seed});
+      const keyPair1 = await Ed25519VerificationKey2018.generate({seed});
+      const keyPair2 = await Ed25519VerificationKey2018.generate({seed});
       expect(keyPair1.publicKey).to.equal(keyPair2.publicKey);
       expect(keyPair1.privateKey).to.equal(keyPair2.privateKey);
     });
@@ -87,7 +87,7 @@ describe('Ed25519KeyPair', () => {
       let keyPair;
       try {
         const seed = null;
-        keyPair = await Ed25519KeyPair.generate({type, seed});
+        keyPair = await Ed25519VerificationKey2018.generate({seed});
       } catch(e) {
         error = e;
       }
@@ -98,7 +98,7 @@ describe('Ed25519KeyPair', () => {
 
   describe('signer factory', () => {
     it('should create a signer', async () => {
-      const ldKeyPair = await Ed25519KeyPair.generate({type});
+      const ldKeyPair = await Ed25519VerificationKey2018.generate();
       const signer = ldKeyPair.signer();
       should.exist(signer.sign);
       signer.sign.should.be.a('function');
@@ -107,13 +107,13 @@ describe('Ed25519KeyPair', () => {
 
   describe('fingerprint', () => {
     it('should create an Ed25519 key fingerprint', async () => {
-      const keyPair = await Ed25519KeyPair.generate();
+      const keyPair = await Ed25519VerificationKey2018.generate();
       const fingerprint = keyPair.fingerprint();
       fingerprint.should.be.a('string');
       fingerprint.startsWith('z').should.be.true;
     });
     it('should be properly multicodec encoded', async () => {
-      const keyPair = await Ed25519KeyPair.generate();
+      const keyPair = await Ed25519VerificationKey2018.generate();
       const fingerprint = keyPair.fingerprint();
       const mcPubkeyBytes = multibase.decode(fingerprint);
       const mcType = multicodec.getCodec(mcPubkeyBytes);
@@ -124,7 +124,7 @@ describe('Ed25519KeyPair', () => {
       expect(typeof keyPair.fingerprint()).to.equal('string');
     });
     it('throws TypeError on improper public key material', async () => {
-      const keyPair = await Ed25519KeyPair.generate();
+      const keyPair = await Ed25519VerificationKey2018.generate();
       let error;
       let result;
       keyPair.publicKeyBase58 = 'PUBLICKEYINFO';
@@ -142,7 +142,7 @@ describe('Ed25519KeyPair', () => {
 
   describe('verify fingerprint', () => {
     it('should verify a valid fingerprint', async () => {
-      const keyPair = await Ed25519KeyPair.generate();
+      const keyPair = await Ed25519VerificationKey2018.generate();
       const fingerprint = keyPair.fingerprint();
       const result = keyPair.verifyFingerprint(fingerprint);
       expect(result).to.exist;
@@ -152,7 +152,7 @@ describe('Ed25519KeyPair', () => {
       result.valid.should.be.true;
     });
     it('should reject an improperly encoded fingerprint', async () => {
-      const keyPair = await Ed25519KeyPair.generate();
+      const keyPair = await Ed25519VerificationKey2018.generate();
       const fingerprint = keyPair.fingerprint();
       const result = keyPair.verifyFingerprint(fingerprint.slice(1));
       expect(result).to.exist;
@@ -165,7 +165,7 @@ describe('Ed25519KeyPair', () => {
         '`fingerprint` must be a multibase encoded string.');
     });
     it('should reject an invalid fingerprint', async () => {
-      const keyPair = await Ed25519KeyPair.generate();
+      const keyPair = await Ed25519VerificationKey2018.generate();
       const fingerprint = keyPair.fingerprint();
       // reverse the valid fingerprint
       const t = fingerprint.slice(1).split('').reverse().join('');
@@ -181,7 +181,7 @@ describe('Ed25519KeyPair', () => {
         'The fingerprint does not match the public key.');
     });
     it('should reject a numeric fingerprint', async () => {
-      const keyPair = await Ed25519KeyPair.generate();
+      const keyPair = await Ed25519VerificationKey2018.generate();
       const result = keyPair.verifyFingerprint(123);
       expect(result).to.exist;
       result.should.be.an('object');
@@ -193,7 +193,7 @@ describe('Ed25519KeyPair', () => {
         '`fingerprint` must be a multibase encoded string.');
     });
     it('should reject an improperly encoded fingerprint', async () => {
-      const keyPair = await Ed25519KeyPair.generate();
+      const keyPair = await Ed25519VerificationKey2018.generate();
       const result = keyPair.verifyFingerprint('zPUBLICKEYINFO');
       expect(result).to.exist;
       result.should.be.an('object');
@@ -206,8 +206,8 @@ describe('Ed25519KeyPair', () => {
     it('generates the same fingerprint from the same seed', async () => {
       const seed = new Uint8Array(32);
       seed.fill(0x01);
-      const keyPair1 = await Ed25519KeyPair.generate({seed});
-      const keyPair2 = await Ed25519KeyPair.generate({seed});
+      const keyPair1 = await Ed25519VerificationKey2018.generate({seed});
+      const keyPair2 = await Ed25519VerificationKey2018.generate({seed});
       const fingerprint = keyPair1.fingerprint();
       const fingerprint2 = keyPair2.fingerprint();
       const result = keyPair2.verifyFingerprint(fingerprint);
@@ -222,10 +222,10 @@ describe('Ed25519KeyPair', () => {
 
   describe('static fromFingerprint', () => {
     it('should round-trip load keys', async () => {
-      const keyPair = await Ed25519KeyPair.generate();
+      const keyPair = await Ed25519VerificationKey2018.generate();
       const fingerprint = keyPair.fingerprint();
 
-      const newKey = Ed25519KeyPair.fromFingerprint({fingerprint});
+      const newKey = Ed25519VerificationKey2018.fromFingerprint({fingerprint});
       expect(newKey.publicKeyBase58).to.equal(keyPair.publicKeyBase58);
     });
   });
@@ -233,12 +233,12 @@ describe('Ed25519KeyPair', () => {
   /* eslint-disable max-len */
   describe('static from', () => {
     it('should round-trip load exported keys', async () => {
-      const keyPair = await Ed25519KeyPair.generate({type});
+      const keyPair = await Ed25519VerificationKey2018.generate();
       keyPair.id = '#test-id';
       const exported = await keyPair.export({
         publicKey: true, privateKey: true
       });
-      const imported = await Ed25519KeyPair.from(exported);
+      const imported = await Ed25519VerificationKey2018.from(exported);
 
       expect(await imported.export({publicKey: true, privateKey: true}))
         .to.eql(exported);
@@ -253,7 +253,7 @@ describe('Ed25519KeyPair', () => {
           "privateKeyBase58": "5hvHHCpocudyac6fT6jJCHe2WThQHsKYsjazkGV2L1Umwj5w9HtzcqoZ886yHJdHKbpC4W2qGhUMPbHNPpNDK6Dj"
         }`);
 
-      const keyPair = await Ed25519KeyPair.from(keyData);
+      const keyPair = await Ed25519VerificationKey2018.from(keyData);
       expect(keyPair.type).to.equal('Ed25519VerificationKey2018');
       expect(keyPair.id)
         .to.equal('did:v1:test:nym:z279nCCZVzxreYfLw3EtFLtBMSVVY2pA6uxKengriMCdG3DF#ocap-invoke-key-1');
