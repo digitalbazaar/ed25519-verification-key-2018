@@ -306,7 +306,8 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    */
   fingerprint() {
     const {publicKeyBase58} = this;
-    return Ed25519VerificationKey2018.fingerprintFromPublicKey({publicKeyBase58});
+    return Ed25519VerificationKey2018
+      .fingerprintFromPublicKey({publicKeyBase58});
   }
 
   /**

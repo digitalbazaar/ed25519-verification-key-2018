@@ -7,14 +7,14 @@ const chai = require('chai');
 const {
   util: {binary: {base58}}
 } = require('node-forge');
-const mockKey = require('./mock-key.json');
+const mockKey = require('../mock-key.json');
 const multibase = require('multibase');
 const multicodec = require('multicodec');
 const should = chai.should();
 
 const {expect} = chai;
 
-const {Ed25519VerificationKey2018} = require('..');
+const {Ed25519VerificationKey2018} = require('../../src/Ed25519VerificationKey2018');
 
 describe('Ed25519VerificationKey2018', () => {
   const type = 'Ed25519VerificationKey2018';
@@ -24,7 +24,8 @@ describe('Ed25519VerificationKey2018', () => {
       const {publicKeyBase58} = mockKey;
       const controller = 'did:example:1234';
 
-      const keyPair = new Ed25519VerificationKey2018({controller, publicKeyBase58});
+      const keyPair = new Ed25519VerificationKey2018(
+        {controller, publicKeyBase58});
       expect(keyPair.id).to.equal(
         'did:example:1234#z6Mks8wJbzhWdmkQZgw7z2qHwaxPVnFsFmEZSXzGkLkvhMvL');
     });
