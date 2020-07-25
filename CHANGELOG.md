@@ -1,4 +1,4 @@
-# ed25519-key-pair Changelog
+# ed25519-verification-key-2018 Changelog
 
 ## 1.0.0 - TBD
 

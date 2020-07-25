@@ -1,8 +1,8 @@
 {
-  "name": "ed25519-key-pair",
-  "version": "1.0.1-0",
+  "name": "@digitalbazaar/ed25519-verification-key-2018",
+  "version": "0.0.1-rc",
   "description": "A library for generating and working with Ed25519 key pairs, for use with crypto-ld.",
-  "homepage": "https://github.com/digitalbazaar/ed25519-key-pair",
+  "homepage": "https://github.com/digitalbazaar/ed25519-verification-key-2018",
   "author": {
     "name": "Digital Bazaar, Inc.",
     "email": "support@digitalbazaar.com",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/digitalbazaar/ed25519-key-pair"
+    "url": "https://github.com/digitalbazaar/ed25519-verification-key-2018"
   },
   "bugs": {
-    "url": "https://github.com/digitalbazaar/ed25519-key-pair/issues",
+    "url": "https://github.com/digitalbazaar/ed25519-verification-key-2018/issues",
     "email": "support@digitalbazaar.com"
   },
   "license": "BSD-3-Clause",
