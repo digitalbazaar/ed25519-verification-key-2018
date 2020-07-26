@@ -5,6 +5,8 @@
 
 const {Ed25519VerificationKey2018} = require('../../');
 const mockKey = require('../mock-key.json');
+const {stringToUint8Array} = require('../text-encoder');
+const {util: {binary: {base58}}} = require('node-forge');
 
 const keyPair = new Ed25519VerificationKey2018({
   publicKeyBase58: mockKey.publicKeyBase58,
@@ -16,22 +18,22 @@ const verifier = keyPair.verifier();
 
 // the same signature should be generated on every test platform
 // (eg. browser, node12, node14)
-const targetSignatureBase64 = 'nlQC1bVF6TMN6cAEJllRGK5orHm5+n4Ih46mu' +
-  'RYgQhTl8J9SR82fEPq7IEAmT9GprBrcRKJzxUk0Eo+yU92zCg==';
+const targetSignatureBase58 = '4AbhYFuwyJd3zPbqR6HieQPdz2DWK2k926v99AegFT9bMR' +
+  'Koagq5be7edGQDhguu37qVw3ULE5fh4ZCTZEYNKxaM';
 
 describe('sign and verify', () => {
   it('works properly', async () => {
-    const data = Buffer.from('test 1234');
+    const data = stringToUint8Array('test 1234');
     const signature = await signer.sign({data});
 
-    signature.toString('base64').should.equal(targetSignatureBase64);
+    base58.encode(signature).should.equal(targetSignatureBase58);
     const result = await verifier.verify({data, signature});
     result.should.be.true;
   });
   it('fails if signing data is changed', async () => {
-    const data = Buffer.from('test 1234');
+    const data = stringToUint8Array('test 1234');
     const signature = await signer.sign({data});
-    const changedData = Buffer.from('test 4321');
+    const changedData = stringToUint8Array('test 4321');
     const result = await verifier.verify({data: changedData, signature});
     result.should.be.false;
   });

@@ -1,18 +1,16 @@
 /*!
  * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-import * as env from './env';
-import * as util from './util';
+import * as env from './env.js';
+import * as util from './util.js';
 import {LDVerifierKeyPair} from 'crypto-ld';
 import * as forge from 'node-forge';
 import * as bs58 from 'bs58';
 import * as semver from 'semver';
 import {promisify} from 'util';
 import {createPublicKey, generateKeyPair, sign, verify} from 'crypto';
-import * as _privateKeyNode12 from './ed25519PrivateKeyNode12';
-import * as _publicKeyNode12 from './ed25519PublicKeyNode12';
+import * as _privateKeyNode12 from './ed25519PrivateKeyNode12.js';
+import * as _publicKeyNode12 from './ed25519PublicKeyNode12.js';
 
 const {pki: {ed25519}, util: {binary: {base58}}} = forge;
 
@@ -55,6 +53,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
       this.id = `${this.controller}#${this.fingerprint()}`;
     }
   }
+
   /**
    * Returns the Base58 encoded public key.
    * @readonly
@@ -94,7 +93,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
       });
     }
 
-    throw new Error(`Unsupported Fingerprint Type: ${fingerprint}`);
+    throw new Error(`Unsupported fingerprint "${fingerprint}".`);
   }
 
   /**
@@ -179,6 +178,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
       ...options
     });
   }
+
   /**
    * Creates an Ed25519 Key Pair from an existing serialized key pair.
    * @example
@@ -336,9 +336,13 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
       return {error: e, valid: false};
     }
 
+    const buffersEqual = publicKeyBuffer.toString() ===
+      fingerprintBuffer.slice(2).toString();
+
     // validate the first two multicodec bytes 0xed01
-    const valid = fingerprintBuffer.slice(0, 2).toString('hex') === 'ed01' &&
-      publicKeyBuffer.equals(fingerprintBuffer.slice(2));
+    const valid = fingerprintBuffer[0] === 0xed &&
+      fingerprintBuffer[1] === 0x01 &&
+      buffersEqual;
     if(!valid) {
       return {
         error: new Error('The fingerprint does not match the public key.'),
