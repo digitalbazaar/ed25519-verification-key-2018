@@ -3,11 +3,18 @@
  */
 'use strict';
 
-const env = require('./env');
-const forge = require('node-forge');
+import * as env from './env';
+import * as util from './util';
+import {LDVerifierKeyPair} from 'crypto-ld';
+import * as forge from 'node-forge';
+import * as bs58 from 'bs58';
+import * as semver from 'semver';
+import {promisify} from 'util';
+import {createPublicKey, generateKeyPair, sign, verify} from 'crypto';
+import * as _privateKeyNode12 from './ed25519PrivateKeyNode12';
+import * as _publicKeyNode12 from './ed25519PublicKeyNode12';
+
 const {pki: {ed25519}, util: {binary: {base58}}} = forge;
-const util = require('./util');
-const {LDVerifierKeyPair} = require('crypto-ld');
 
 const SUITE_ID = 'Ed25519VerificationKey2018';
 
@@ -104,14 +111,11 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    * @returns {Promise<Ed25519VerificationKey2018>} Generates a key pair.
    */
   static async generate(options = {}) {
-    if(env.nodejs && require('semver').gte(process.version, '12.0.0')) {
-      const bs58 = require('bs58');
+    if(env.nodejs && semver.gte(process.version, '12.0.0')) {
       const {
         asn1, ed25519: {privateKeyFromAsn1, publicKeyFromAsn1},
         util: {ByteBuffer}
       } = forge;
-      const {promisify} = require('util');
-      const {createPublicKey, generateKeyPair} = require('crypto');
       const publicKeyEncoding = {format: 'der', type: 'spki'};
       const privateKeyEncoding = {format: 'der', type: 'pkcs8'};
       // if no seed provided, generate a random key
@@ -142,10 +146,9 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
       if(!(Buffer.isBuffer(seedBytes) && seedBytes.length === 32)) {
         throw new TypeError('`seed` must be a 32 byte Buffer or Uint8Array.');
       }
-      const _privateKey = require('./ed25519PrivateKeyNode12');
 
       // create a node private key
-      const privateKey = _privateKey.create({seedBytes});
+      const privateKey = _privateKeyNode12.create({seedBytes});
 
       // create a node public key from the private key
       const publicKey = createPublicKey(privateKey);
@@ -368,18 +371,15 @@ function ed25519SignerFactory(key) {
     };
   }
 
-  if(env.nodejs && require('semver').gte(process.version, '12.0.0')) {
-    const bs58 = require('bs58');
+  if(env.nodejs && semver.gte(process.version, '12.0.0')) {
     const privateKeyBytes = util.base58Decode({
       decode: bs58.decode,
       keyMaterial: key.privateKeyBase58,
       type: 'private'
     });
 
-    const _privateKey = require('./ed25519PrivateKeyNode12');
     // create a Node private key
-    const privateKey = _privateKey.create({privateKeyBytes});
-    const {sign} = require('crypto');
+    const privateKey = _privateKeyNode12.create({privateKeyBytes});
 
     return {
       async sign({data}) {
@@ -418,17 +418,14 @@ function ed25519SignerFactory(key) {
  * to the key passed in.
  */
 function ed25519VerifierFactory(key) {
-  if(env.nodejs && require('semver').gte(process.version, '12.0.0')) {
-    const bs58 = require('bs58');
+  if(env.nodejs && semver.gte(process.version, '12.0.0')) {
     const publicKeyBytes = util.base58Decode({
       decode: bs58.decode,
       keyMaterial: key.publicKeyBase58,
       type: 'public'
     });
-    const _publicKey = require('./ed25519PublicKeyNode12');
     // create a Node public key
-    const publicKey = _publicKey.create({publicKeyBytes});
-    const {verify} = require('crypto');
+    const publicKey = _publicKeyNode12.create({publicKeyBytes});
     return {
       async verify({data, signature}) {
         return verify(
@@ -453,6 +450,6 @@ function ed25519VerifierFactory(key) {
 
 Ed25519VerificationKey2018.suite = SUITE_ID;
 
-module.exports = {
+export {
   Ed25519VerificationKey2018
 };

@@ -3,11 +3,13 @@
  */
 'use strict';
 
-const {createPrivateKey} = require('crypto');
-const {privateKeyDerEncode} = require('./util');
+import {createPrivateKey} from 'crypto';
+import {privateKeyDerEncode} from './util';
 
-exports.create = ({privateKeyBytes, seedBytes}) => createPrivateKey({
-  key: privateKeyDerEncode({privateKeyBytes, seedBytes}),
-  format: 'der',
-  type: 'pkcs8'
-});
+export default function create({privateKeyBytes, seedBytes}) {
+  return createPrivateKey({
+    key: privateKeyDerEncode({privateKeyBytes, seedBytes}),
+    format: 'der',
+    type: 'pkcs8'
+  });
+}
