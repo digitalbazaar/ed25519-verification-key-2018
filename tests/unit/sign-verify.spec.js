@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const {Ed25519VerificationKey2018} = require('../../src/Ed25519VerificationKey2018');
+const {Ed25519VerificationKey2018} = require('../../');
 const mockKey = require('../mock-key.json');
 
 const keyPair = new Ed25519VerificationKey2018({

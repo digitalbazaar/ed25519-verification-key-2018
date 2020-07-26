@@ -8,7 +8,7 @@ const nodejs = (
 const browser = !nodejs &&
   (typeof window !== 'undefined' || typeof self !== 'undefined');
 
-module.exports = {
+export default {
   nodejs,
   browser
 };

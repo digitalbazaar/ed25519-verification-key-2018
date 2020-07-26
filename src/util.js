@@ -3,7 +3,8 @@
  */
 'use strict';
 
-const {asn1, oids, util: {ByteBuffer}} = require('node-forge');
+import {asn1, oids, util} from 'node-forge';
+const {ByteBuffer} = util;
 
 /**
  * Wraps Base58 decoding operations in
@@ -26,7 +27,7 @@ const {asn1, oids, util: {ByteBuffer}} = require('node-forge');
  * @returns {Object} - The decoded bytes. The data structure for the bytes is
  *   determined by the provided decode function.
  */
-exports.base58Decode = ({decode, keyMaterial, type}) => {
+export function base58Decode({decode, keyMaterial, type}) {
   let bytes;
   try {
     bytes = decode(keyMaterial);
@@ -39,9 +40,9 @@ exports.base58Decode = ({decode, keyMaterial, type}) => {
     throw new TypeError(`The ${type} key material must be Base58 encoded.`);
   }
   return bytes;
-};
+}
 
-exports.privateKeyDerEncode = ({privateKeyBytes, seedBytes}) => {
+export function privateKeyDerEncode({privateKeyBytes, seedBytes}) {
   if(!(privateKeyBytes || seedBytes)) {
     throw new TypeError('`privateKeyBytes` or `seedBytes` is required.');
   }
@@ -94,9 +95,9 @@ exports.privateKeyDerEncode = ({privateKeyBytes, seedBytes}) => {
 
   const privateKeyDer = asn1.toDer(a);
   return Buffer.from(privateKeyDer.getBytes(), 'binary');
-};
+}
 
-exports.publicKeyDerEncode = ({publicKeyBytes}) => {
+export function publicKeyDerEncode({publicKeyBytes}) {
   if(!(Buffer.isBuffer(publicKeyBytes) && publicKeyBytes.length === 32)) {
     throw new TypeError('`publicKeyBytes` must be a 32 byte Buffer.');
   }
@@ -126,4 +127,4 @@ exports.publicKeyDerEncode = ({publicKeyBytes}) => {
 
   const publicKeyDer = asn1.toDer(a);
   return Buffer.from(publicKeyDer.getBytes(), 'binary');
-};
+}

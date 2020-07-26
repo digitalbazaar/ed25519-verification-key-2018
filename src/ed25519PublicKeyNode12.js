@@ -3,11 +3,13 @@
  */
 'use strict';
 
-const {createPublicKey} = require('crypto');
-const {publicKeyDerEncode} = require('./util');
+import {createPublicKey} from 'crypto';
+import {publicKeyDerEncode} from './util';
 
-exports.create = ({publicKeyBytes}) => createPublicKey({
-  key: publicKeyDerEncode({publicKeyBytes}),
-  format: 'der',
-  type: 'spki'
-});
+export default function create({publicKeyBytes}) {
+  return createPublicKey({
+    key: publicKeyDerEncode({publicKeyBytes}),
+    format: 'der',
+    type: 'spki'
+  });
+}

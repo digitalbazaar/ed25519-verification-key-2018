@@ -14,7 +14,7 @@ const should = chai.should();
 
 const {expect} = chai;
 
-const {Ed25519VerificationKey2018} = require('../../src/Ed25519VerificationKey2018');
+const {Ed25519VerificationKey2018} = require('../../');
 
 describe('Ed25519VerificationKey2018', () => {
   const type = 'Ed25519VerificationKey2018';
