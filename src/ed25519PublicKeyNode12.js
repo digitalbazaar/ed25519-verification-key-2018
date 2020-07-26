@@ -4,7 +4,7 @@
 'use strict';
 
 import {createPublicKey} from 'crypto';
-import {publicKeyDerEncode} from './util';
+import {publicKeyDerEncode} from './util.js';
 
 export default function create({publicKeyBytes}) {
   return createPublicKey({

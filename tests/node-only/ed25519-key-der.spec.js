@@ -50,25 +50,3 @@ describe('Ed25519 Keys', () => {
   }); // end Ed25519 Private Key
 });
 
-// export DERs from Node public and private keys to use as test vectors
-/*
-async function _generateTestVector() {
-  const {createPublicKey} = require('crypto');
-  const _privateKeyNode12 = require('../src/ed25519PrivateKeyNode12');
-
-  // create a node private key
-  const privateKey = _privateKeyNode12.create({privateKeyBytes});
-
-  // create a node public key from the private key
-  const publicKey = createPublicKey(privateKey);
-
-  // export the keys and extract key bytes from the exported DERs
-  const publicKeyEncoding = {format: 'der', type: 'spki'};
-  const privateKeyEncoding = {format: 'der', type: 'pkcs8'};
-  const publicKeyDerBytes = Buffer.from(publicKey.export(publicKeyEncoding));
-  const privateKeyDerBytes = Buffer.from(privateKey.export(privateKeyEncoding));
-  publicKeyDerBytes.toString('base64').should.equal(targetPublicDerBytesBase64);
-  privateKeyDerBytes.toString('base64').should.equal(
-    targetPrivateDerBytesBase64);
-}
-*/
