@@ -1,16 +1,16 @@
 /*!
  * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
-import * as env from './env.js';
-import * as util from './util.js';
-import {LDVerifierKeyPair} from 'crypto-ld';
-import * as forge from 'node-forge';
 import * as bs58 from 'bs58';
+import * as env from './env.js';
+import * as forge from 'node-forge';
 import * as semver from 'semver';
-import {promisify} from 'util';
-import {createPublicKey, generateKeyPair, sign, verify} from 'crypto';
+import * as util from './util.js';
 import * as _privateKeyNode12 from './ed25519PrivateKeyNode12.js';
 import * as _publicKeyNode12 from './ed25519PublicKeyNode12.js';
+import {createPublicKey, generateKeyPair, sign, verify} from 'crypto';
+import {LDVerifierKeyPair} from 'crypto-ld';
+import {promisify} from 'util';
 
 const {pki: {ed25519}, util: {binary: {base58}}} = forge;
 
@@ -235,7 +235,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    * @example
    * > keyPair.addEncodedPublicKey({});
    * { publicKeyBase58: 'GycSSui454dpYRKiFdsQ5uaE8Gy3ac6dSMPcAoQsk8yq' }
-   * @param {Object} publicKeyNode - The public key node in a jsonld-signature.
+   * @param {object} publicKeyNode - The public key node in a jsonld-signature.
    * @param {string} publicKeyNode.publicKeyBase58 - Base58 Public Key for
    * [jsonld-signatures]{@link https://github.com/digitalbazaar/jsonld-signatures}.
    *
@@ -249,9 +249,9 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
 
   /**
    * Adds an encrypted private key to the KeyPair.
-   * @param {Object} keyNode - A plain object.
+   * @param {object} keyNode - A plain object.
    *
-   * @return {Object} The keyNode with an encrypted private key attached.
+   * @return {object} The keyNode with an encrypted private key attached.
    */
   async addPrivateKey(keyNode) {
     keyNode.privateKeyBase58 = this.privateKeyBase58;
@@ -304,7 +304,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    * {valid: true};
    * @param {string} fingerprint - A Base58 public key.
    *
-   * @returns {Object} An object indicating valid is true or false.
+   * @returns {object} An object indicating valid is true or false.
    */
   verifyFingerprint(fingerprint) {
     // fingerprint should have `z` prefix indicating
