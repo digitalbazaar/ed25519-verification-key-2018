@@ -114,7 +114,8 @@ keyPair.fingerprint();
 To verify a fingerprint:
 
 ```js
-keyPair.verifyFingerprint('z6Mks8wJbzhWdmkQZgw7z2qHwaxPVnFsFmEZSXzGkLkvhMvL');
+const fingerprint = 'z6Mks8wJbzhWdmkQZgw7z2qHwaxPVnFsFmEZSXzGkLkvhMvL';
+keyPair.verifyFingerprint({fingerprint});
 // ->
 { valid: true }
 ```
