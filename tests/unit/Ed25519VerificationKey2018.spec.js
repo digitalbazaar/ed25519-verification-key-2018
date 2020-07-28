@@ -80,8 +80,8 @@ describe('Ed25519VerificationKey2018', () => {
       seed.fill(0x01);
       const keyPair1 = await Ed25519VerificationKey2018.generate({seed});
       const keyPair2 = await Ed25519VerificationKey2018.generate({seed});
-      expect(keyPair1.publicKey).to.equal(keyPair2.publicKey);
-      expect(keyPair1.privateKey).to.equal(keyPair2.privateKey);
+      expect(keyPair1.publicKeyBase58).to.equal(keyPair2.publicKeyBase58);
+      expect(keyPair1.privateKeyBase58).to.equal(keyPair2.privateKeyBase58);
     });
     it('should fail to generate a key with an invalid seed', async () => {
       let error;
