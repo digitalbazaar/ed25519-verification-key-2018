@@ -145,7 +145,7 @@ describe('Ed25519VerificationKey2018', () => {
     it('should verify a valid fingerprint', async () => {
       const keyPair = await Ed25519VerificationKey2018.generate();
       const fingerprint = keyPair.fingerprint();
-      const result = keyPair.verifyFingerprint(fingerprint);
+      const result = keyPair.verifyFingerprint({fingerprint});
       expect(result).to.exist;
       result.should.be.an('object');
       expect(result.valid).to.exist;
@@ -155,7 +155,8 @@ describe('Ed25519VerificationKey2018', () => {
     it('should reject an improperly encoded fingerprint', async () => {
       const keyPair = await Ed25519VerificationKey2018.generate();
       const fingerprint = keyPair.fingerprint();
-      const result = keyPair.verifyFingerprint(fingerprint.slice(1));
+      const result = keyPair.verifyFingerprint(
+        {fingerprint: fingerprint.slice(1)});
       expect(result).to.exist;
       result.should.be.an('object');
       expect(result.valid).to.exist;
@@ -171,7 +172,7 @@ describe('Ed25519VerificationKey2018', () => {
       // reverse the valid fingerprint
       const t = fingerprint.slice(1).split('').reverse().join('');
       const badFingerprint = fingerprint[0] + t;
-      const result = keyPair.verifyFingerprint(badFingerprint);
+      const result = keyPair.verifyFingerprint({fingerprint: badFingerprint});
       expect(result).to.exist;
       result.should.be.an('object');
       expect(result.valid).to.exist;
@@ -183,7 +184,7 @@ describe('Ed25519VerificationKey2018', () => {
     });
     it('should reject a numeric fingerprint', async () => {
       const keyPair = await Ed25519VerificationKey2018.generate();
-      const result = keyPair.verifyFingerprint(123);
+      const result = keyPair.verifyFingerprint({fingerprint: 123});
       expect(result).to.exist;
       result.should.be.an('object');
       expect(result.valid).to.exist;
@@ -195,7 +196,7 @@ describe('Ed25519VerificationKey2018', () => {
     });
     it('should reject an improperly encoded fingerprint', async () => {
       const keyPair = await Ed25519VerificationKey2018.generate();
-      const result = keyPair.verifyFingerprint('zPUBLICKEYINFO');
+      const result = keyPair.verifyFingerprint({fingerprint: 'zPUBLICKEYINFO'});
       expect(result).to.exist;
       result.should.be.an('object');
       expect(result.valid).to.exist;
@@ -211,7 +212,7 @@ describe('Ed25519VerificationKey2018', () => {
       const keyPair2 = await Ed25519VerificationKey2018.generate({seed});
       const fingerprint = keyPair1.fingerprint();
       const fingerprint2 = keyPair2.fingerprint();
-      const result = keyPair2.verifyFingerprint(fingerprint);
+      const result = keyPair2.verifyFingerprint({fingerprint});
       expect(result).to.exist;
       result.should.be.an('object');
       expect(result.valid).to.exist;

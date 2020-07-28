@@ -278,16 +278,15 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
   }
 
   /**
-   * Tests whether the fingerprint was
-   * generated from a given key pair.
+   * Tests whether the fingerprint was generated from a given key pair.
    * @example
-   * > edKeyPair.verifyFingerprint('z2S2Q6MkaFJewa');
+   * > edKeyPair.verifyFingerprint({fingerprint: 'z2S2Q6MkaFJewa'});
    * {valid: true};
    * @param {string} fingerprint - A Base58 public key.
    *
    * @returns {object} An object indicating valid is true or false.
    */
-  verifyFingerprint(fingerprint) {
+  verifyFingerprint({fingerprint}) {
     // fingerprint should have `z` prefix indicating
     // that it's multi-base encoded
     if(!(typeof fingerprint === 'string' && fingerprint[0] === 'z')) {
