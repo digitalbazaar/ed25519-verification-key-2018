@@ -1,8 +1,6 @@
 /*
- * Copyright (c) 2018-2019 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
 import {asn1, oids, util} from 'node-forge';
 const {ByteBuffer} = util;
 
@@ -16,7 +14,7 @@ const {ByteBuffer} = util;
  *    keyMaterial: this.publicKeyBase58,
  *    type: 'public'
  *   });
- * @param {Object} options - The decoder options.
+ * @param {object} options - The decoder options.
  * @param {Function} options.decode - The decode function to use.
  * @param {string} options.keyMaterial - The Base58 encoded
  * key material to decode.
@@ -24,7 +22,7 @@ const {ByteBuffer} = util;
  * key material that will be included
  * in an error message (e.g. 'public', 'private').
  *
- * @returns {Object} - The decoded bytes. The data structure for the bytes is
+ * @returns {object} - The decoded bytes. The data structure for the bytes is
  *   determined by the provided decode function.
  */
 export function base58Decode({decode, keyMaterial, type}) {
