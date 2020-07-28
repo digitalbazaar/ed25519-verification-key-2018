@@ -55,25 +55,6 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
   }
 
   /**
-   * Returns the Base58 encoded public key.
-   * @readonly
-   *
-   * @returns {string} The Base58 encoded public key.
-   */
-  get publicKey() {
-    return this.publicKeyBase58;
-  }
-  /**
-   * Returns the Base58 encoded private key.
-   * @readonly
-   *
-   * @returns {string} The Base58 encoded private key.
-   */
-  get privateKey() {
-    return this.privateKeyBase58;
-  }
-
-  /**
    * Creates an instance of LDKeyPair from a key fingerprint.
    * Note: Only key types that use their full public key in the fingerprint
    * are supported (so, currently, only 'ed25519').
