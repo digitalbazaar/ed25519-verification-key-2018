@@ -59,7 +59,12 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    * @returns {LDKeyPair}
    * @throws Unsupported Fingerprint Type.
    */
-  static fromFingerprint({fingerprint}) {
+  static fromFingerprint({fingerprint} = {}) {
+    if(!fingerprint ||
+       !(typeof fingerprint === 'string' && fingerprint[0] === 'z')) {
+      throw new Error('`fingerprint` must be a multibase encoded string.');
+    }
+
     // skip leading `z` that indicates base58 encoding
     const buffer = base58.decode(fingerprint.substr(1));
 
