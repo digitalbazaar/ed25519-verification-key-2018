@@ -17,12 +17,11 @@ const {pki: {ed25519}, util: {binary: {base58}}} = forge;
 const SUITE_ID = 'Ed25519VerificationKey2018';
 
 class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
-  /* eslint-disable max-len */
   /**
-   * An implementation of
-   * [Ed25519 Signature 2018]{@link https://w3c-dvcg.github.io/lds-ed25519-2018/}
-   * for
-   * [jsonld-signatures.]{@link https://github.com/digitalbazaar/jsonld-signatures}
+   * An implementation of the Ed25519VerificationKey spec, for use with
+   * Linked Data Proofs.
+   * @see https://w3c-dvcg.github.io/lds-ed25519-2018/
+   * @see https://github.com/digitalbazaar/jsonld-signatures
    * @example
    * > const privateKeyBase58 =
    *   '3Mmk4UzTRJTEtxaKk61LxtgUxAa2Dg36jF6VogPtRiKvfpsQWKPCLesKSV182RMmvM'
@@ -35,12 +34,9 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    * > EDKey
    * Ed25519VerificationKey2018 { ...
    * @param {object} options - Options hashmap.
-   * @param {string} options.publicKeyBase58 - Base58 encoded Public Key
-   *   (unencoded is 32-bytes).
-   * @param {string} [options.privateKeyBase58] - Base58 Private Key
-   *   (unencoded is 64-bytes).
+   * @param {string} options.publicKeyBase58 - Base58btc encoded Public Key.
+   * @param {string} [options.privateKeyBase58] - Base58btc Private Key.
    */
-  /* eslint-enable */
   constructor(options = {}) {
     super(options);
     this.type = SUITE_ID;
@@ -176,10 +172,9 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
     return new Ed25519VerificationKey2018(options);
   }
 
-  /* eslint-disable max-len */
   /**
-   * Returns a signer object for use with
-   * [jsonld-signatures]{@link https://github.com/digitalbazaar/jsonld-signatures}.
+   * Returns a signer object for use with Linked Data Proofs.
+   * @see https://github.com/digitalbazaar/jsonld-signatures
    * @example
    * > const signer = keyPair.signer();
    * > signer
@@ -188,15 +183,14 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    *
    * @returns {{sign: Function}} A signer for the json-ld block.
    */
-  /* eslint-enable */
   signer() {
     return ed25519SignerFactory(this);
   }
 
-  /* eslint-disable max-len */
   /**
-   * Returns a verifier object for use with
-   * [jsonld-signatures]{@link https://github.com/digitalbazaar/jsonld-signatures}.
+   * Returns a verifier object for use with signature suites.
+   * @see https://github.com/digitalbazaar/jsonld-signatures
+   *
    * @example
    * > const verifier = keyPair.verifier();
    * > verifier
@@ -205,38 +199,35 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    *
    * @returns {{verify: Function}} Used to verify jsonld-signatures.
    */
-  /* eslint-enable */
   verifier() {
     return ed25519VerifierFactory(this);
   }
 
-  /* eslint-disable max-len */
   /**
    * Adds a public key base to a public key node.
-   * @example
-   * > keyPair.addEncodedPublicKey({});
-   * { publicKeyBase58: 'GycSSui454dpYRKiFdsQ5uaE8Gy3ac6dSMPcAoQsk8yq' }
-   * @param {object} publicKeyNode - The public key node in a jsonld-signature.
-   * @param {string} publicKeyNode.publicKeyBase58 - Base58 Public Key for
-   * [jsonld-signatures]{@link https://github.com/digitalbazaar/jsonld-signatures}.
    *
-   * @returns {{verify: Function}} A PublicKeyNode in a block.
+   * @param {object} key - The public key object in a jsonld-signature.
+   * @param {string} key.publicKeyBase58 - Base58btc encoded Public Key.
+   *
+   * @see https://github.com/digitalbazaar/jsonld-signatures
+   *
+   * @returns {object} A PublicKeyNode, with key material.
    */
-  /* eslint-enable */
-  addPublicKey(publicKeyNode) {
-    publicKeyNode.publicKeyBase58 = this.publicKeyBase58;
-    return publicKeyNode;
+  addPublicKey({key}) {
+    key.publicKeyBase58 = this.publicKeyBase58;
+    return key;
   }
 
   /**
-   * Adds an encrypted private key to the KeyPair.
-   * @param {object} keyNode - A plain object.
+   * Adds the private key material to the KeyPair.
+   * @param {object} key - A plain object.
+   * @param {string} key.privateKeyBase58 - Base58btc encoded Private Key
    *
-   * @return {object} The keyNode with an encrypted private key attached.
+   * @return {object} The keyNode with encoded private key material.
    */
-  async addPrivateKey(keyNode) {
-    keyNode.privateKeyBase58 = this.privateKeyBase58;
-    return keyNode;
+  addPrivateKey({key}) {
+    key.privateKeyBase58 = this.privateKeyBase58;
+    return key;
   }
 
   /**
@@ -248,7 +239,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    *
    * @returns {string} The fingerprint.
    */
-  static fingerprintFromPublicKey({publicKeyBase58}) {
+  static fingerprintFromPublicKey({publicKeyBase58} = {}) {
     // ed25519 cryptonyms are multicodec encoded values, specifically:
     // (multicodec ed25519-pub 0xed01 + key bytes)
     const pubkeyBytes = util.base58Decode({
@@ -286,7 +277,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    *
    * @returns {object} An object indicating valid is true or false.
    */
-  verifyFingerprint({fingerprint}) {
+  verifyFingerprint({fingerprint} = {}) {
     // fingerprint should have `z` prefix indicating
     // that it's multi-base encoded
     if(!(typeof fingerprint === 'string' && fingerprint[0] === 'z')) {
