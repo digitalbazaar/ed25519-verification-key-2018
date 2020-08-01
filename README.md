@@ -70,7 +70,7 @@ key pair via `from()` for an unsupported type, an error will be thrown.
 
 ### Exporting the public key only
 
-To export just the public key of a pair - `exportPublic()`:
+To export just the public key of a pair:
 
 ```js
 await keyPair.export({publicKey: true});
