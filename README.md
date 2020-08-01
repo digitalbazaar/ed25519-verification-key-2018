@@ -49,7 +49,7 @@ To generate a new public/private key pair:
   key.
 
 ```js
-import {Ed25519VerificationKey2018} from 'ed25519-verification-key-2018';
+import {Ed25519VerificationKey2018} from '@digitalbazaar/ed25519-verification-key-2018';
 
 const edKeyPair = await Ed25519VerificationKey2018.generate();
 ```
