@@ -1,6 +1,6 @@
 # ed25519-verification-key-2018 Changelog
 
-## 1.0.0 - TBD
+## 1.0.0 - 2020-08-01
 
 ### Added
 - Initial commit. Extracted from 
