@@ -3,9 +3,9 @@
  */
 'use strict';
 
-const {Ed25519VerificationKey2018} = require('../../');
+const {Ed25519VerificationKey2018} = require('../../src/main.js');
 const mockKey = require('../mock-key.json');
-const {stringToUint8Array} = require('../text-encoder');
+const {stringToUint8Array} = require('../text-encoder.js');
 const {util: {binary: {base58}}} = require('node-forge');
 
 const keyPair = new Ed25519VerificationKey2018({
