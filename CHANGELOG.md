@@ -1,5 +1,10 @@
 # ed25519-verification-key-2018 Changelog
 
+## 1.0.2 - 2020-08-03
+
+### Changed
+- Fix karma tests, package.json export.
+
 ## 1.0.1 - 2020-08-01
 
 ### Changed
