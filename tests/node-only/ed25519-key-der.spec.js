@@ -8,7 +8,7 @@ chai.should();
 
 const {util: {binary: {base58}}} = require('node-forge');
 const {base58Decode, privateKeyDerEncode, publicKeyDerEncode} =
-  require('../../src/util');
+  require('../../src/');
 const mockKey = require('../mock-key.json');
 
 const targetPrivateDerBytesBase64 =

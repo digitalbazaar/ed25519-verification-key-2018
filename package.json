@@ -21,6 +21,7 @@
   "files": [
     "src/*.js"
   ],
+  "module": "src/main.js",
   "dependencies": {
     "bs58": "^4.0.1",
     "crypto-ld": "^4.0.0",
@@ -84,9 +85,8 @@
   ],
   "scripts": {
     "test": "npm run lint && npm run test-node && npm run test-karma",
-    "test-node": "cross-env NODE_ENV=test mocha -r esm --preserve-symlinks -t 10000 tests/**/*.spec.js",
+    "test-node": "cross-env NODE_ENV=test mocha --preserve-symlinks -t 10000 tests/**/*.spec.js",
     "test-karma": "karma start tests/karma.conf.js",
-    "benchmark": "node benchmark/benchmark.js",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text-summary npm run test-node",
     "coverage-ci": "cross-env NODE_ENV=test nyc --reporter=text-lcov npm run test-node > coverage.lcov",
     "coverage-report": "nyc report",

@@ -4,7 +4,7 @@
 import {createPublicKey} from 'crypto';
 import {publicKeyDerEncode} from './util.js';
 
-export default function create({publicKeyBytes}) {
+export function create({publicKeyBytes}) {
   return createPublicKey({
     key: publicKeyDerEncode({publicKeyBytes}),
     format: 'der',

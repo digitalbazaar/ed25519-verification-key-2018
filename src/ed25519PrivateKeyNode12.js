@@ -4,7 +4,7 @@
 import {createPrivateKey} from 'crypto';
 import {privateKeyDerEncode} from './util.js';
 
-export default function create({privateKeyBytes, seedBytes}) {
+export function create({privateKeyBytes, seedBytes}) {
   return createPrivateKey({
     key: privateKeyDerEncode({privateKeyBytes, seedBytes}),
     format: 'der',

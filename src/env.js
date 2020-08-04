@@ -1,12 +1,8 @@
 /*!
  * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
-const nodejs = (
+export const nodejs = (
   typeof process !== 'undefined' && process.versions && process.versions.node);
-const browser = !nodejs &&
+export const browser = !nodejs &&
   (typeof window !== 'undefined' || typeof self !== 'undefined');
 
-export default {
-  nodejs,
-  browser
-};
