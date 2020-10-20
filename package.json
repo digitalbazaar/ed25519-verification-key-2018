@@ -26,7 +26,7 @@
     "bs58": "^4.0.1",
     "crypto-ld": "^4.0.0",
     "esm": "^3.2.25",
-    "node-forge": "^0.9.1",
+    "node-forge": "^0.10.0",
     "semver": "^7.3.2"
   },
   "devDependencies": {
