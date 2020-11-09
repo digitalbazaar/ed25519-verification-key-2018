@@ -312,8 +312,8 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
       return {error: e, valid: false};
     }
 
-    const buffersEqual = publicKeyBuffer.toString() ===
-      fingerprintBuffer.slice(2).toString();
+    const buffersEqual = _isEqualBuffer(publicKeyBuffer,
+      fingerprintBuffer.slice(2));
 
     // validate the first two multicodec bytes 0xed01
     const valid = fingerprintBuffer[0] === 0xed &&
@@ -426,6 +426,18 @@ function ed25519VerifierFactory(key) {
       return ed25519.verify({message: data, signature, publicKey});
     }
   };
+}
+
+function _isEqualBuffer(buf1, buf2) {
+  if(buf1.length != buf2.length) {
+    return false;
+  }
+  for(let i = 0; i < buf1.length; i++) {
+    if(buf1[i] != buf2[i]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 Ed25519VerificationKey2018.suite = SUITE_ID;
