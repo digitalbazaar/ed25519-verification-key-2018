@@ -312,8 +312,8 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
       return {error: e, valid: false};
     }
 
-    const buffersEqual = _isEqualBuffer(publicKeyBuffer,
-      fingerprintBuffer.slice(2));
+    const buffersEqual = _isEqualBuffer(
+      publicKeyBuffer, fingerprintBuffer.slice(2));
 
     // validate the first two multicodec bytes 0xed01
     const valid = fingerprintBuffer[0] === 0xed &&
@@ -429,11 +429,11 @@ function ed25519VerifierFactory(key) {
 }
 
 function _isEqualBuffer(buf1, buf2) {
-  if(buf1.length != buf2.length) {
+  if(buf1.length !== buf2.length) {
     return false;
   }
   for(let i = 0; i < buf1.length; i++) {
-    if(buf1[i] != buf2[i]) {
+    if(buf1[i] !== buf2[i]) {
       return false;
     }
   }
