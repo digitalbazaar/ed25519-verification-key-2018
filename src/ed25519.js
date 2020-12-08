@@ -50,7 +50,7 @@ const api = {
     const seed = await randomBytesAsync(32);
     return api.generateKeyPairFromSeed(seed);
   },
-  async sign(privateKeyBytes, data) {
+  async sign(data, privateKeyBytes) {
     const privateKey = await createPrivateKey({
       key: privateKeyDerEncode({privateKeyBytes}),
       format: 'der',

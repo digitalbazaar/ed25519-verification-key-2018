@@ -2,15 +2,9 @@
  * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
 import * as bs58 from 'bs58';
-import * as env from './env.js';
-import * as semver from 'semver';
 import * as util from './util.js';
-import * as _privateKeyNode12 from './ed25519PrivateKeyNode12.js';
-import * as _publicKeyNode12 from './ed25519PublicKeyNode12.js';
 import ed25519 from './ed25519.js';
-import {createPublicKey, generateKeyPair, sign, verify} from 'crypto';
 import {LDVerifierKeyPair} from 'crypto-ld';
-import {promisify} from 'util';
 
 const SUITE_ID = 'Ed25519VerificationKey2018';
 
@@ -90,71 +84,15 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    * @returns {Promise<Ed25519VerificationKey2018>} Generates a key pair.
    */
   static async generate(options = {}) {
-    if(env.nodejs && semver.gte(process.version, '12.0.0')) {
-      const {
-        asn1, ed25519: {privateKeyFromAsn1, publicKeyFromAsn1},
-        util: {ByteBuffer}
-      } = forge;
-      const publicKeyEncoding = {format: 'der', type: 'spki'};
-      const privateKeyEncoding = {format: 'der', type: 'pkcs8'};
-      // if no seed provided, generate a random key
-      if(!('seed' in options)) {
-        const generateKeyPairAsync = promisify(generateKeyPair);
-        const {publicKey, privateKey} = await generateKeyPairAsync('ed25519', {
-          publicKeyEncoding, privateKeyEncoding
-        });
-        const publicKeyBytes = publicKeyFromAsn1(
-          asn1.fromDer(new ByteBuffer(publicKey)));
-        const {privateKeyBytes} = privateKeyFromAsn1(
-          asn1.fromDer(new ByteBuffer(privateKey)));
-
-        return new Ed25519VerificationKey2018({
-          publicKeyBase58: bs58.encode(publicKeyBytes),
-          // private key is the 32 byte private key + 32 byte public key
-          privateKeyBase58: bs58.encode(Buffer.concat(
-            [privateKeyBytes, publicKeyBytes])),
-          ...options
-        });
-      }
-      // create a key from the provided seed
-      const {seed} = options;
-      let seedBytes;
-      if(seed instanceof Uint8Array || Buffer.isBuffer(seed)) {
-        seedBytes = Buffer.from(seed);
-      }
-      if(!(Buffer.isBuffer(seedBytes) && seedBytes.length === 32)) {
-        throw new TypeError('`seed` must be a 32 byte Buffer or Uint8Array.');
-      }
-
-      // create a node private key
-      const privateKey = _privateKeyNode12.create({seedBytes});
-
-      // create a node public key from the private key
-      const publicKey = createPublicKey(privateKey);
-
-      // export the keys and extract key bytes from the exported DERs
-      const publicKeyBytes = publicKeyFromAsn1(
-        asn1.fromDer(new ByteBuffer(publicKey.export(publicKeyEncoding))));
-      const {privateKeyBytes} = privateKeyFromAsn1(
-        asn1.fromDer(new ByteBuffer(privateKey.export(privateKeyEncoding))));
-
-      return new Ed25519VerificationKey2018({
-        publicKeyBase58: bs58.encode(publicKeyBytes),
-        // private key is the 32 byte private key + 32 byte public key
-        privateKeyBase58: bs58.encode(Buffer.concat(
-          [privateKeyBytes, publicKeyBytes])),
-        ...options
-      });
+    let keyObject;
+    if(options.seed) {
+      keyObject = await ed25519.generateKeyPairFromSeed(options.seed);
+    } else {
+      keyObject = await ed25519.generateKeyPair();
     }
-
-    const generateOptions = {};
-    if('seed' in options) {
-      generateOptions.seed = options.seed;
-    }
-    const {publicKey, privateKey} = ed25519.generateKeyPair(generateOptions);
     return new Ed25519VerificationKey2018({
-      publicKeyBase58: bs58.encode(publicKey),
-      privateKeyBase58: bs58.encode(privateKey),
+      publicKeyBase58: `z${bs58.encode(keyObject.publicKey)}`,
+      privateKeyBase58: `z${bs58.encode(keyObject.secretKey)}`,
       ...options
     });
   }
@@ -349,35 +287,16 @@ function ed25519SignerFactory(key) {
     };
   }
 
-  if(env.nodejs && semver.gte(process.version, '12.0.0')) {
-    const privateKeyBytes = util.base58Decode({
-      decode: bs58.decode,
-      keyMaterial: key.privateKeyBase58,
-      type: 'private'
-    });
-
-    // create a Node private key
-    const privateKey = _privateKeyNode12.create({privateKeyBytes});
-
-    return {
-      async sign({data}) {
-        const signature = sign(
-          null, Buffer.from(data.buffer, data.byteOffset, data.length),
-          privateKey);
-        return signature;
-      }
-    };
-  }
-
-  // browser implementation
-  const privateKey = util.base58Decode({
+  const privateKeyBytes = util.base58Decode({
     decode: bs58.decode,
     keyMaterial: key.privateKeyBase58,
     type: 'private'
   });
+
   return {
     async sign({data}) {
-      return ed25519.sign({message: data, privateKey});
+      const signature = ed25519.sign(data, privateKeyBytes);
+      return signature;
     }
   };
 }
@@ -396,32 +315,14 @@ function ed25519SignerFactory(key) {
  * to the key passed in.
  */
 function ed25519VerifierFactory(key) {
-  if(env.nodejs && semver.gte(process.version, '12.0.0')) {
-    const publicKeyBytes = util.base58Decode({
-      decode: bs58.decode,
-      keyMaterial: key.publicKeyBase58,
-      type: 'public'
-    });
-    // create a Node public key
-    const publicKey = _publicKeyNode12.create({publicKeyBytes});
-    return {
-      async verify({data, signature}) {
-        return verify(
-          null, Buffer.from(data.buffer, data.byteOffset, data.length),
-          publicKey, signature);
-      }
-    };
-  }
-
-  // browser implementation
-  const publicKey = util.base58Decode({
+  const publicKeyBytes = util.base58Decode({
     decode: bs58.decode,
     keyMaterial: key.publicKeyBase58,
     type: 'public'
   });
   return {
     async verify({data, signature}) {
-      return ed25519.verify({message: data, signature, publicKey});
+      return ed25519.verify(publicKeyBytes, data, signature);
     }
   };
 }
