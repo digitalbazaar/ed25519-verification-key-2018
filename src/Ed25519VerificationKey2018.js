@@ -3,16 +3,14 @@
  */
 import * as bs58 from 'bs58';
 import * as env from './env.js';
-import * as forge from 'node-forge';
 import * as semver from 'semver';
 import * as util from './util.js';
 import * as _privateKeyNode12 from './ed25519PrivateKeyNode12.js';
 import * as _publicKeyNode12 from './ed25519PublicKeyNode12.js';
+import ed255129 from './ed25519.js';
 import {createPublicKey, generateKeyPair, sign, verify} from 'crypto';
 import {LDVerifierKeyPair} from 'crypto-ld';
 import {promisify} from 'util';
-
-const {pki: {ed25519}, util: {binary: {base58}}} = forge;
 
 const SUITE_ID = 'Ed25519VerificationKey2018';
 

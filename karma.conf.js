@@ -31,7 +31,7 @@ module.exports = function(config) {
       mode: 'development',
       devtool: 'inline-source-map',
       node: {
-        Buffer: false,
+        Buffer: true,
         process: false,
         crypto: false,
         setImmediate: false
