@@ -1,5 +1,25 @@
 # ed25519-verification-key-2018 Changelog
 
+## 2.0.0 - TBD
+
+## Added
+- **BREAKING**: Using @stabelib/ed25519 over node-forge.
+- **BREAKING**: Using `base58-universal` over `bs58`.
+- Added new files `ed25519.js` and `ed25519-browser.js` to `/src`.
+
+## Removed
+- **BREAKING**: Removed node-forge from the project.
+- **BREAKING**: Removed semver from the project.
+- **BREAKING**: Removed bs58 from project.
+- **BREAKING**: Removed `src/ed25519PrivateKeyNode12.js`.
+- **BREAKING**: Removed `src/ed25519PublicKeyNode12.js`.
+
+## Changed
+- This library now switches between 2 different ed25519.js files for
+  key generation when in node or the browser.
+- `privateKeyDerEncode` now only accepts Uint8Arrays.
+- `publicKeyDerEncode` now only accepts Uint8Arrays. 
+
 ## 1.1.0 - 2020-10-20
 
 ### Changed
