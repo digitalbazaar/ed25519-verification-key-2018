@@ -7,7 +7,7 @@ import * as semver from 'semver';
 import * as util from './util.js';
 import * as _privateKeyNode12 from './ed25519PrivateKeyNode12.js';
 import * as _publicKeyNode12 from './ed25519PublicKeyNode12.js';
-import ed255129 from './ed25519.js';
+import ed25519 from './ed25519.js';
 import {createPublicKey, generateKeyPair, sign, verify} from 'crypto';
 import {LDVerifierKeyPair} from 'crypto-ld';
 import {promisify} from 'util';
@@ -64,12 +64,12 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
     }
 
     // skip leading `z` that indicates base58 encoding
-    const buffer = base58.decode(fingerprint.substr(1));
+    const buffer = bs58.decode(fingerprint.substr(1));
 
     // buffer is: 0xed 0x01 <public key bytes>
     if(buffer[0] === 0xed && buffer[1] === 0x01) {
       return new Ed25519VerificationKey2018({
-        publicKeyBase58: base58.encode(buffer.slice(2))
+        publicKeyBase58: bs58.encode(buffer.slice(2))
       });
     }
 
@@ -153,8 +153,8 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
     }
     const {publicKey, privateKey} = ed25519.generateKeyPair(generateOptions);
     return new Ed25519VerificationKey2018({
-      publicKeyBase58: base58.encode(publicKey),
-      privateKeyBase58: base58.encode(privateKey),
+      publicKeyBase58: bs58.encode(publicKey),
+      privateKeyBase58: bs58.encode(privateKey),
       ...options
     });
   }
@@ -246,7 +246,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
     // ed25519 cryptonyms are multicodec encoded values, specifically:
     // (multicodec ed25519-pub 0xed01 + key bytes)
     const pubkeyBytes = util.base58Decode({
-      decode: base58.decode,
+      decode: bs58.decode,
       keyMaterial: publicKeyBase58,
       type: 'public'
     });
@@ -255,7 +255,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
     buffer[1] = 0x01;
     buffer.set(pubkeyBytes, 2);
     // prefix with `z` to indicate multi-base base58btc encoding
-    return `z${base58.encode(buffer)}`;
+    return `z${bs58.encode(buffer)}`;
   }
 
   /**
@@ -292,7 +292,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
     let fingerprintBuffer;
     try {
       fingerprintBuffer = util.base58Decode({
-        decode: base58.decode,
+        decode: bs58.decode,
         keyMaterial: fingerprint.slice(1),
         type: `fingerprint's`
       });
@@ -302,7 +302,7 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
     let publicKeyBuffer;
     try {
       publicKeyBuffer = util.base58Decode({
-        decode: base58.decode,
+        decode: bs58.decode,
         keyMaterial: this.publicKeyBase58,
         type: 'public'
       });
@@ -371,7 +371,7 @@ function ed25519SignerFactory(key) {
 
   // browser implementation
   const privateKey = util.base58Decode({
-    decode: base58.decode,
+    decode: bs58.decode,
     keyMaterial: key.privateKeyBase58,
     type: 'private'
   });
@@ -415,7 +415,7 @@ function ed25519VerifierFactory(key) {
 
   // browser implementation
   const publicKey = util.base58Decode({
-    decode: base58.decode,
+    decode: bs58.decode,
     keyMaterial: key.publicKeyBase58,
     type: 'public'
   });
