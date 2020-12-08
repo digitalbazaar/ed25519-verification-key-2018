@@ -85,14 +85,14 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
    */
   static async generate(options = {}) {
     let keyObject;
-    if(options.seed) {
+    if('seed' in options) {
       keyObject = await ed25519.generateKeyPairFromSeed(options.seed);
     } else {
       keyObject = await ed25519.generateKeyPair();
     }
     return new Ed25519VerificationKey2018({
-      publicKeyBase58: `z${bs58.encode(keyObject.publicKey)}`,
-      privateKeyBase58: `z${bs58.encode(keyObject.secretKey)}`,
+      publicKeyBase58: bs58.encode(keyObject.publicKey),
+      privateKeyBase58: bs58.encode(keyObject.secretKey),
       ...options
     });
   }
