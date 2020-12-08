@@ -1,10 +1,21 @@
 /*
  * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
-const DER_PRIVATE_KEY_PREFIX = Buffer.from(
-  '302e020100300506032b657004220420', 'hex');
 
-const DER_PUBLIC_KEY_PREFIX = Buffer.from('302a300506032b6570032100', 'hex');
+const fromHexString = hexString =>
+  new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+
+const DER_PRIVATE_KEY_PREFIX = fromHexString(
+  '302e020100300506032b657004220420');
+
+const DER_PUBLIC_KEY_PREFIX = fromHexString('302a300506032b6570032100');
+
+const combineTypedArrays = (first, second) => {
+  const newArray = new Uint8Array(first.length + second.length);
+  newArray.set(first);
+  newArray.set(second, first.length);
+  return newArray;
+};
 
 /**
  * Wraps Base58 decoding operations in
@@ -32,6 +43,7 @@ export function base58Decode({decode, keyMaterial, type}) {
   try {
     bytes = decode(keyMaterial);
   } catch(e) {
+    console.error(e);
     // do nothing
     // the bs58 implementation throws, forge returns undefined
     // this helper throws when no result is produced
@@ -61,12 +73,12 @@ export function privateKeyDerEncode({privateKeyBytes, seedBytes}) {
     // extract the first 32 bytes of the 64 byte private key representation
     p = privateKeyBytes.slice(0, 32);
   }
-  return Buffer.concat([DER_PRIVATE_KEY_PREFIX, p]);
+  return combineTypedArrays(DER_PRIVATE_KEY_PREFIX, p);
 }
 
 export function publicKeyDerEncode({publicKeyBytes}) {
   if(!(publicKeyBytes instanceof Uint8Array && publicKeyBytes.length === 32)) {
     throw new TypeError('`publicKeyBytes` must be a 32 byte Buffer.');
   }
-  return Buffer.concat([DER_PUBLIC_KEY_PREFIX, publicKeyBytes]);
+  return combineTypedArrays(DER_PUBLIC_KEY_PREFIX, publicKeyBytes);
 }
