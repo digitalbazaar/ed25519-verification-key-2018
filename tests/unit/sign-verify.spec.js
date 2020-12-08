@@ -25,7 +25,6 @@ describe('sign and verify', () => {
   it('works properly', async () => {
     const data = stringToUint8Array('test 1234');
     const signature = await signer.sign({data});
-
     bs58.encode(signature).should.equal(targetSignatureBase58);
     const result = await verifier.verify({data, signature});
     result.should.be.true;
