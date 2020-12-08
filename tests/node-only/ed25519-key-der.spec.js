@@ -6,7 +6,7 @@
 const chai = require('chai');
 chai.should();
 
-const {util: {binary: {base58}}} = require('node-forge');
+const bs58 = require('base58-universal');
 const {base58Decode, privateKeyDerEncode, publicKeyDerEncode} =
   require('../../src/');
 const mockKey = require('../mock-key.json');
@@ -17,13 +17,13 @@ const targetPublicDerBytesBase64 =
   'MCowBQYDK2VwAyEAvHZI57pFMs4OnJfkcp0QSotH9LbDT/6yRtYKt/ZpUpU=';
 
 const privateKeyBytes = base58Decode({
-  decode: base58.decode,
+  decode: bs58.decode,
   keyMaterial: mockKey.privateKeyBase58,
   type: 'private'
 });
 
 const publicKeyBytes = base58Decode({
-  decode: base58.decode,
+  decode: bs58.decode,
   keyMaterial: mockKey.publicKeyBase58,
   type: 'public'
 });

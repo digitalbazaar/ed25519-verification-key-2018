@@ -6,7 +6,7 @@
 const {Ed25519VerificationKey2018} = require('../../src/main.js');
 const mockKey = require('../mock-key.json');
 const {stringToUint8Array} = require('../text-encoder.js');
-const {util: {binary: {base58}}} = require('node-forge');
+const bs58 = require('base58-universal');
 
 const keyPair = new Ed25519VerificationKey2018({
   publicKeyBase58: mockKey.publicKeyBase58,
@@ -26,7 +26,7 @@ describe('sign and verify', () => {
     const data = stringToUint8Array('test 1234');
     const signature = await signer.sign({data});
 
-    base58.encode(signature).should.equal(targetSignatureBase58);
+    bs58.encode(signature).should.equal(targetSignatureBase58);
     const result = await verifier.verify({data, signature});
     result.should.be.true;
   });

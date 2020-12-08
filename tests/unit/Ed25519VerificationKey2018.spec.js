@@ -4,9 +4,7 @@
 'use strict';
 
 const chai = require('chai');
-const {
-  util: {binary: {base58}}
-} = require('node-forge');
+const bs58 = require('base58-universal');
 const mockKey = require('../mock-key.json');
 const multibase = require('multibase');
 const multicodec = require('multicodec');
@@ -70,8 +68,8 @@ describe('Ed25519VerificationKey2018', () => {
       should.not.exist(error);
       should.exist(ldKeyPair.privateKeyBase58);
       should.exist(ldKeyPair.publicKeyBase58);
-      const privateKeyBytes = base58.decode(ldKeyPair.privateKeyBase58);
-      const publicKeyBytes = base58.decode(ldKeyPair.publicKeyBase58);
+      const privateKeyBytes = bs58.decode(ldKeyPair.privateKeyBase58);
+      const publicKeyBytes = bs58.decode(ldKeyPair.publicKeyBase58);
       privateKeyBytes.length.should.equal(64);
       publicKeyBytes.length.should.equal(32);
     });
@@ -120,7 +118,7 @@ describe('Ed25519VerificationKey2018', () => {
       const mcType = multicodec.getCodec(mcPubkeyBytes);
       mcType.should.equal('ed25519-pub');
       const pubkeyBytes = multicodec.rmPrefix(mcPubkeyBytes);
-      const encodedPubkey = base58.encode(pubkeyBytes);
+      const encodedPubkey = bs58.encode(pubkeyBytes);
       encodedPubkey.should.equal(keyPair.publicKeyBase58);
       expect(typeof keyPair.fingerprint()).to.equal('string');
     });

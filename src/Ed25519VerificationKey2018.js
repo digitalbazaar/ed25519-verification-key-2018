@@ -1,7 +1,7 @@
 /*!
  * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
-import * as bs58 from 'bs58';
+import * as bs58 from 'base58-universal';
 import * as util from './util.js';
 import ed25519 from './ed25519.js';
 import {LDVerifierKeyPair} from 'crypto-ld';
@@ -286,7 +286,6 @@ function ed25519SignerFactory(key) {
       }
     };
   }
-
   const privateKeyBytes = util.base58Decode({
     decode: bs58.decode,
     keyMaterial: key.privateKeyBase58,
