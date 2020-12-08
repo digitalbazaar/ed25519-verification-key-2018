@@ -8,8 +8,6 @@ import {
   createPublicKey,
   randomBytes
 } from 'crypto';
-import * as ed25519 from '@stablelib/ed25519';
-import * as semver from 'semver';
 
 import {promisify} from 'util';
 
@@ -32,7 +30,6 @@ const api = {
    * @returns {object} The object with the public and private key material.
   */
   async generateKeyPairFromSeed(seedBytes) {
-    
     const privateKey = await createPrivateKey({
       // node is more than happy to create a new private key using a DER
       key: privateKeyDerEncode({seedBytes}),
