@@ -291,10 +291,9 @@ function ed25519SignerFactory(key) {
     keyMaterial: key.privateKeyBase58,
     type: 'private'
   });
-
   return {
     async sign({data}) {
-      const signature = ed25519.sign(data, privateKeyBytes);
+      const signature = ed25519.sign(privateKeyBytes, data);
       return signature;
     }
   };

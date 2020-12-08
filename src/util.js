@@ -54,6 +54,20 @@ export function base58Decode({decode, keyMaterial, type}) {
   return bytes;
 }
 
+/**
+ * Takes a Buffer or Uint8Array with the raw private key and encodes it
+ * in DER-encoded PKCS#8 format.
+ * Allows Uint8Arrays to be interoperable with node's crypto functions.
+ *
+ * @param {object} options - Options to use.
+ * @param {Uint8Array} [options.privateKeyBytes] - Required if no seedBytes.
+ * @param {Uint8Array} [options.seedBytes] - Required if no privateKeyBytes.
+ *
+ * @throws {TypeError} Throws if the supplied buffer is not of the right size
+ *  or not a Uint8Array or Buffer.
+ *
+ * @returns {Uint8Array} DER private key prefix + key bytes.
+*/
 export function privateKeyDerEncode({privateKeyBytes, seedBytes}) {
   if(!(privateKeyBytes || seedBytes)) {
     throw new TypeError('`privateKeyBytes` or `seedBytes` is required.');
@@ -75,7 +89,18 @@ export function privateKeyDerEncode({privateKeyBytes, seedBytes}) {
   }
   return combineTypedArrays(DER_PRIVATE_KEY_PREFIX, p);
 }
-
+/**
+ * Takes a Uint8Array of public key bytes and encodes it in DER-encoded
+ * SubjectPublicKeyInfo (SPKI) format.
+ * Allows Uint8Arrays to be interoperable with node's crypto functions.
+ *
+ * @param {object} options - Options to use.
+ * @param {Uint8Array} options.publicKeyBytes - The keyBytes.
+ *
+ * @throws {TypeError} Throws if the bytes are not Uint8Array or of length 32.
+ *
+ * @returns {Uint8Array} DER Public key Prefix + key bytes.
+*/
 export function publicKeyDerEncode({publicKeyBytes}) {
   if(!(publicKeyBytes instanceof Uint8Array && publicKeyBytes.length === 32)) {
     throw new TypeError('`publicKeyBytes` must be a 32 byte Buffer.');

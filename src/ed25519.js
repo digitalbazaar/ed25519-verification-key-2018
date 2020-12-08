@@ -8,8 +8,8 @@ import {
   createPublicKey,
   randomBytes
 } from 'crypto';
-
 import {promisify} from 'util';
+import {privateKeyDerEncode, publicKeyDerEncode} from './util.js';
 
 const randomBytesAsync = promisify(randomBytes);
 
@@ -50,7 +50,7 @@ const api = {
     const seed = await randomBytesAsync(32);
     return api.generateKeyPairFromSeed(seed);
   },
-  async sign(data, privateKeyBytes) {
+  async sign(privateKeyBytes, data) {
     const privateKey = await createPrivateKey({
       key: privateKeyDerEncode({privateKeyBytes}),
       format: 'der',
@@ -87,59 +87,4 @@ function getKeyMaterial(buffer) {
     return buffer.slice(DER_PRIVATE_KEY_PREFIX.length, buffer.length);
   }
   throw new Error('Expected Buffer to match Ed25519 Public or Private Prefix');
-}
-
-/**
- * Takes a Buffer or Uint8Array with the raw private key and encodes it
- * in DER-encoded PKCS#8 format.
- * Allows Uint8Arrays to be interoperable with node's crypto functions.
- *
- * @param {object} options - Options to use.
- * @param {Buffer} [options.privateKeyBytes] - Required if no seedBytes.
- * @param {Buffer} [options.seedBytes] - Required if no privateKeyBytes.
- *
- * @throws {TypeError} Throws if the supplied buffer is not of the right size
- *  or not a Uint8Array or Buffer.
- *
- * @returns {Buffer} DER private key prefix + key bytes.
-*/
-function privateKeyDerEncode({privateKeyBytes, seedBytes}) {
-  if(!(privateKeyBytes || seedBytes)) {
-    throw new TypeError('`privateKeyBytes` or `seedBytes` is required.');
-  }
-  if(!privateKeyBytes && !(seedBytes instanceof Uint8Array &&
-    seedBytes.length === 32)) {
-    throw new TypeError('`seedBytes` must be a 32 byte Buffer.');
-  }
-  if(!seedBytes && !(privateKeyBytes instanceof Uint8Array &&
-    privateKeyBytes.length === 64)) {
-    throw new TypeError('`privateKeyBytes` must be a 64 byte Buffer.');
-  }
-  let p;
-  if(seedBytes) {
-    p = seedBytes;
-  } else {
-    // extract the first 32 bytes of the 64 byte private key representation
-    p = privateKeyBytes.slice(0, 32);
-  }
-  return Buffer.concat([DER_PRIVATE_KEY_PREFIX, p]);
-}
-
-/**
- * Takes a Uint8Array of public key bytes and encodes it in DER-encoded
- * SubjectPublicKeyInfo (SPKI) format.
- * Allows Uint8Arrays to be interoperable with node's crypto functions.
- *
- * @param {object} options - Options to use.
- * @param {Uint8Array} options.publicKeyBytes - The keyBytes.
- *
- * @throws {TypeError} Throws if the bytes are not Uint8Array or of length 32.
- *
- * @returns {Buffer} DER Public key Prefix + key bytes.
-*/
-function publicKeyDerEncode({publicKeyBytes}) {
-  if(!(publicKeyBytes instanceof Uint8Array && publicKeyBytes.length === 32)) {
-    throw new TypeError('`publicKeyBytes` must be a 32 byte Buffer.');
-  }
-  return Buffer.concat([DER_PUBLIC_KEY_PREFIX, publicKeyBytes]);
 }
