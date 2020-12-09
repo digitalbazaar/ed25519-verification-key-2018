@@ -2,15 +2,42 @@
  * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
 
-const fromHexString = hexString =>
-  new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+/**
+ * Takes in a string and parses it 2 tokens at a time into a Uint8Array.
+ *
+ * @param {string} hexString - A hexidecimal string.
+ *
+ * @returns {Unit8Array} The resulting bytes.
+*/
+const fromHexString = hexString => {
+  const result = [];
+  // hexidecimal numbers should be 2 characters between 0-F
+  const hexCharLength = 2;
+  for(let i = 0; i < hexString.length; i += hexCharLength) {
+    // take the 2 characters and parse to a base 16 integer
+    result.push(parseInt(hexString.substr(i, hexCharLength), 16));
+  }
+  // return the resulting array as a Uint8Array interoperable in Node & Browser
+  return new Uint8Array(result);
+};
 
+// A Uint8Array with an private ed25519 DER prefix in it.
 const DER_PRIVATE_KEY_PREFIX = fromHexString(
   '302e020100300506032b657004220420');
 
+// A Uint8Array with a public ed25519 DEr prefix in it.
 const DER_PUBLIC_KEY_PREFIX = fromHexString('302a300506032b6570032100');
 
-const combineTypedArrays = (first, second) => {
+/**
+ * Combines two Uint8Arrays
+ *
+ * @param {Uint8Array} first - The first part of the array usually a DER prefix.
+ * @param {Uint8Array} second - The second part of the array usually the key
+ *  material.
+ *
+ * @returns {Uint8Array} The 2 arrays combined.
+*/
+const combineUint8Arrays = (first, second) => {
   const newArray = new Uint8Array(first.length + second.length);
   newArray.set(first);
   newArray.set(second, first.length);
@@ -87,7 +114,7 @@ export function privateKeyDerEncode({privateKeyBytes, seedBytes}) {
     // extract the first 32 bytes of the 64 byte private key representation
     p = privateKeyBytes.slice(0, 32);
   }
-  return combineTypedArrays(DER_PRIVATE_KEY_PREFIX, p);
+  return combineUint8Arrays(DER_PRIVATE_KEY_PREFIX, p);
 }
 /**
  * Takes a Uint8Array of public key bytes and encodes it in DER-encoded
@@ -105,5 +132,5 @@ export function publicKeyDerEncode({publicKeyBytes}) {
   if(!(publicKeyBytes instanceof Uint8Array && publicKeyBytes.length === 32)) {
     throw new TypeError('`publicKeyBytes` must be a 32 byte Buffer.');
   }
-  return combineTypedArrays(DER_PUBLIC_KEY_PREFIX, publicKeyBytes);
+  return combineUint8Arrays(DER_PUBLIC_KEY_PREFIX, publicKeyBytes);
 }
