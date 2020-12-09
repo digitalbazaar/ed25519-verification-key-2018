@@ -9,17 +9,17 @@ import {
   randomBytes
 } from 'crypto';
 import {promisify} from 'util';
-import {privateKeyDerEncode, publicKeyDerEncode} from './util.js';
+import {
+  DER_PUBLIC_KEY_PREFIX,
+  DER_PRIVATE_KEY_PREFIX,
+  privateKeyDerEncode,
+  publicKeyDerEncode
+} from './util.js';
 
 const randomBytesAsync = promisify(randomBytes);
 
 // used to export node's public keys to buffers
 const publicKeyEncoding = {format: 'der', type: 'spki'};
-// used to turn private key bytes into a buffer in DER format
-const DER_PRIVATE_KEY_PREFIX = Buffer.from(
-  '302e020100300506032b657004220420', 'hex');
-// used to turn public key bytes into a buffer in DER format
-const DER_PUBLIC_KEY_PREFIX = Buffer.from('302a300506032b6570032100', 'hex');
 
 const api = {
   /**

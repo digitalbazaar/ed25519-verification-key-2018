@@ -3,7 +3,8 @@
  */
 
 /**
- * Takes in a string and parses it 2 tokens at a time into a Uint8Array.
+ * Takes in a hexidecimal string and parses it 2 characters at a time
+ *  into a Uint8Array.
  *
  * @param {string} hexString - A hexidecimal string.
  *
@@ -22,11 +23,11 @@ const fromHexString = hexString => {
 };
 
 // A Uint8Array with an private ed25519 DER prefix in it.
-const DER_PRIVATE_KEY_PREFIX = fromHexString(
+export const DER_PRIVATE_KEY_PREFIX = fromHexString(
   '302e020100300506032b657004220420');
 
 // A Uint8Array with a public ed25519 DEr prefix in it.
-const DER_PUBLIC_KEY_PREFIX = fromHexString('302a300506032b6570032100');
+export const DER_PUBLIC_KEY_PREFIX = fromHexString('302a300506032b6570032100');
 
 /**
  * Combines two Uint8Arrays
