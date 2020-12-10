@@ -3,49 +3,6 @@
  */
 
 /**
- * Takes in a hexidecimal string and parses it 2 characters at a time
- *  into a Uint8Array.
- *
- * @param {string} hexString - A hexidecimal string.
- *
- * @returns {Unit8Array} The resulting bytes.
-*/
-const fromHexString = hexString => {
-  const result = [];
-  // hexidecimal numbers should be 2 characters between 0-F
-  const hexCharLength = 2;
-  for(let i = 0; i < hexString.length; i += hexCharLength) {
-    // take the 2 characters and parse to a base 16 integer
-    result.push(parseInt(hexString.substr(i, hexCharLength), 16));
-  }
-  // return the resulting array as a Uint8Array interoperable in Node & Browser
-  return new Uint8Array(result);
-};
-
-// A Uint8Array with an private ed25519 DER prefix in it.
-export const DER_PRIVATE_KEY_PREFIX = fromHexString(
-  '302e020100300506032b657004220420');
-
-// A Uint8Array with a public ed25519 DEr prefix in it.
-export const DER_PUBLIC_KEY_PREFIX = fromHexString('302a300506032b6570032100');
-
-/**
- * Combines two Uint8Arrays
- *
- * @param {Uint8Array} first - The first part of the array usually a DER prefix.
- * @param {Uint8Array} second - The second part of the array usually the key
- *  material.
- *
- * @returns {Uint8Array} The 2 arrays combined.
-*/
-const combineUint8Arrays = (first, second) => {
-  const newArray = new Uint8Array(first.length + second.length);
-  newArray.set(first);
-  newArray.set(second, first.length);
-  return newArray;
-};
-
-/**
  * Wraps Base58 decoding operations in
  * order to provide consistent error messages.
  * @ignore
@@ -80,58 +37,4 @@ export function base58Decode({decode, keyMaterial, type}) {
     throw new TypeError(`The ${type} key material must be Base58 encoded.`);
   }
   return bytes;
-}
-
-/**
- * Takes a Buffer or Uint8Array with the raw private key and encodes it
- * in DER-encoded PKCS#8 format.
- * Allows Uint8Arrays to be interoperable with node's crypto functions.
- *
- * @param {object} options - Options to use.
- * @param {Uint8Array} [options.privateKeyBytes] - Required if no seedBytes.
- * @param {Uint8Array} [options.seedBytes] - Required if no privateKeyBytes.
- *
- * @throws {TypeError} Throws if the supplied buffer is not of the right size
- *  or not a Uint8Array or Buffer.
- *
- * @returns {Uint8Array} DER private key prefix + key bytes.
-*/
-export function privateKeyDerEncode({privateKeyBytes, seedBytes}) {
-  if(!(privateKeyBytes || seedBytes)) {
-    throw new TypeError('`privateKeyBytes` or `seedBytes` is required.');
-  }
-  if(!privateKeyBytes && !(seedBytes instanceof Uint8Array &&
-    seedBytes.length === 32)) {
-    throw new TypeError('`seedBytes` must be a 32 byte Buffer.');
-  }
-  if(!seedBytes && !(privateKeyBytes instanceof Uint8Array &&
-    privateKeyBytes.length === 64)) {
-    throw new TypeError('`privateKeyBytes` must be a 64 byte Buffer.');
-  }
-  let p;
-  if(seedBytes) {
-    p = seedBytes;
-  } else {
-    // extract the first 32 bytes of the 64 byte private key representation
-    p = privateKeyBytes.slice(0, 32);
-  }
-  return combineUint8Arrays(DER_PRIVATE_KEY_PREFIX, p);
-}
-/**
- * Takes a Uint8Array of public key bytes and encodes it in DER-encoded
- * SubjectPublicKeyInfo (SPKI) format.
- * Allows Uint8Arrays to be interoperable with node's crypto functions.
- *
- * @param {object} options - Options to use.
- * @param {Uint8Array} options.publicKeyBytes - The keyBytes.
- *
- * @throws {TypeError} Throws if the bytes are not Uint8Array or of length 32.
- *
- * @returns {Uint8Array} DER Public key Prefix + key bytes.
-*/
-export function publicKeyDerEncode({publicKeyBytes}) {
-  if(!(publicKeyBytes instanceof Uint8Array && publicKeyBytes.length === 32)) {
-    throw new TypeError('`publicKeyBytes` must be a 32 byte Buffer.');
-  }
-  return combineUint8Arrays(DER_PUBLIC_KEY_PREFIX, publicKeyBytes);
 }

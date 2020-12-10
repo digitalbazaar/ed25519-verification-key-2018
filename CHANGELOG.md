@@ -8,6 +8,7 @@
 - Added new files `ed25519.js` and `ed25519-browser.js` to `/src`.
 
 ## Removed
+- **BREAKING**: Removed public export of privateKeyDerEncode & publicKeyDerEncode.
 - **BREAKING**: Removed `node-forge` from the project.
 - **BREAKING**: Removed `semver` from the project.
 - **BREAKING**: Removed `bs58` from project.
