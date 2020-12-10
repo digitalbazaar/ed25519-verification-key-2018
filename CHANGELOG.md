@@ -16,6 +16,7 @@
 - **BREAKING**: Removed `src/ed25519PublicKeyNode12.js`.
 
 ## Changed
+- **BREAKING**: Browser must supply `crypto.getRandomValues`.
 - This library now switches between 2 different ed25519.js files for
   key generation when in node or the browser.
 - `privateKeyDerEncode` now only accepts Uint8Arrays.

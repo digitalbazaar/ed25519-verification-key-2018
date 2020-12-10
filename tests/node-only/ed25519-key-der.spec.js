@@ -34,9 +34,10 @@ describe('Ed25519 Keys', () => {
   describe('Ed25519 Private Key', () => {
     describe('DER encoding', () => {
       it('works properly', async () => {
-        const forgeDer = _privateKeyDerEncode({privateKeyBytes});
-        const forgeDerBytesBase64 = Buffer.from(forgeDer).toString('base64');
-        forgeDerBytesBase64.should.equal(targetPrivateDerBytesBase64);
+        const privateDer = _privateKeyDerEncode({privateKeyBytes});
+        const privateDerBytesBase64 = Buffer.from(privateDer).toString(
+          'base64');
+        privateDerBytesBase64.should.equal(targetPrivateDerBytesBase64);
       });
     }); // end DER encoding
   }); // end Ed25519 Private Key
@@ -44,9 +45,9 @@ describe('Ed25519 Keys', () => {
   describe('Ed25519 Public Key', () => {
     describe('DER encoding', () => {
       it('works properly', async () => {
-        const forgeDer = _publicKeyDerEncode({publicKeyBytes});
-        const forgeDerBytesBase64 = Buffer.from(forgeDer).toString('base64');
-        forgeDerBytesBase64.should.equal(targetPublicDerBytesBase64);
+        const publicDer = _publicKeyDerEncode({publicKeyBytes});
+        const publicDerBytesBase64 = Buffer.from(publicDer).toString('base64');
+        publicDerBytesBase64.should.equal(targetPublicDerBytesBase64);
       });
     }); // end DER encoding
   }); // end Ed25519 Private Key
