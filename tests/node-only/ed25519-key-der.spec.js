@@ -7,8 +7,10 @@ const chai = require('chai');
 chai.should();
 
 const bs58 = require('base58-universal');
-const {base58Decode, privateKeyDerEncode, publicKeyDerEncode} =
-  require('../../src/');
+const {base58Decode} = require('../../src/');
+const {_privateKeyDerEncode, _publicKeyDerEncode} =
+  require('../../src/ed25519');
+
 const mockKey = require('../mock-key.json');
 
 const targetPrivateDerBytesBase64 =
@@ -32,7 +34,7 @@ describe('Ed25519 Keys', () => {
   describe('Ed25519 Private Key', () => {
     describe('DER encoding', () => {
       it('works properly', async () => {
-        const forgeDer = privateKeyDerEncode({privateKeyBytes});
+        const forgeDer = _privateKeyDerEncode({privateKeyBytes});
         const forgeDerBytesBase64 = Buffer.from(forgeDer).toString('base64');
         forgeDerBytesBase64.should.equal(targetPrivateDerBytesBase64);
       });
@@ -42,7 +44,7 @@ describe('Ed25519 Keys', () => {
   describe('Ed25519 Public Key', () => {
     describe('DER encoding', () => {
       it('works properly', async () => {
-        const forgeDer = publicKeyDerEncode({publicKeyBytes});
+        const forgeDer = _publicKeyDerEncode({publicKeyBytes});
         const forgeDerBytesBase64 = Buffer.from(forgeDer).toString('base64');
         forgeDerBytesBase64.should.equal(targetPublicDerBytesBase64);
       });
