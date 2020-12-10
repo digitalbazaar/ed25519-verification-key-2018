@@ -28,9 +28,7 @@ export function base58Decode({decode, keyMaterial, type}) {
   try {
     bytes = decode(keyMaterial);
   } catch(e) {
-    console.error(e);
     // do nothing
-    // the bs58 implementation throws, forge returns undefined
     // this helper throws when no result is produced
   }
   if(bytes === undefined) {
