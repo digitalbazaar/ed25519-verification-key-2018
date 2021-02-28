@@ -1,6 +1,6 @@
 # ed25519-verification-key-2018 Changelog
 
-## 2.0.0 - TBD
+## 2.0.0 - 2021-02-27
 
 ## Added
 - **BREAKING**: Using @stablelib/ed25519 over node-forge.
