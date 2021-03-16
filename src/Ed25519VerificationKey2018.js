@@ -156,8 +156,8 @@ class Ed25519VerificationKey2018 extends LDKeyPair {
    *   information used in verification methods by signatures.
    */
   export({publicKey = false, privateKey = false} = {}) {
-    if(!publicKey && !privateKey) {
-      throw new Error(
+    if(!(publicKey || privateKey)) {
+      throw new TypeError(
         'Export requires specifying either "publicKey" or "privateKey".');
     }
     const exportedKey = {
