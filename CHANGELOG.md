@@ -1,6 +1,6 @@
 # ed25519-verification-key-2018 Changelog
 
-## 3.0.0 - 
+## 3.0.0 - 2021-03-16
 
 ## Changed
 - Update to use `crypto-ld v5.0`.
