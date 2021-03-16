@@ -155,7 +155,7 @@ class Ed25519VerificationKey2018 extends LDKeyPair {
    * @returns {object} A public key object
    *   information used in verification methods by signatures.
    */
-  export({publicKey = false, privateKey = false}) {
+  export({publicKey = false, privateKey = false} = {}) {
     if(!publicKey && !privateKey) {
       throw new Error(
         'Export requires specifying either "publicKey" or "privateKey".');
