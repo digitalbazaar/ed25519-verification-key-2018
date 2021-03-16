@@ -4,11 +4,11 @@
 import * as bs58 from 'base58-universal';
 import * as util from './util.js';
 import ed25519 from './ed25519.js';
-import {LDVerifierKeyPair} from 'crypto-ld';
+import {LDKeyPair} from 'crypto-ld';
 
 const SUITE_ID = 'Ed25519VerificationKey2018';
 
-class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
+class Ed25519VerificationKey2018 extends LDKeyPair {
   /**
    * An implementation of the Ed25519VerificationKey spec, for use with
    * Linked Data Proofs.
@@ -145,30 +145,25 @@ class Ed25519VerificationKey2018 extends LDVerifierKeyPair {
   }
 
   /**
-   * Adds a public key base to a public key node.
+   * Exports the serialized representation of the KeyPair
+   * and other information that json-ld Signatures can use to form a proof.
    *
-   * @param {object} key - The public key object in a jsonld-signature.
-   * @param {string} key.publicKeyBase58 - Base58btc encoded Public Key.
+   * @param {object} [options={}] - Options hashmap.
+   * @param {boolean} [options.publicKey] - Export public key material?
+   * @param {boolean} [options.privateKey] - Export private key material?
    *
-   * @see https://github.com/digitalbazaar/jsonld-signatures
-   *
-   * @returns {object} A PublicKeyNode, with key material.
+   * @returns {object} A public key object
+   *   information used in verification methods by signatures.
    */
-  addPublicKey({key}) {
-    key.publicKeyBase58 = this.publicKeyBase58;
-    return key;
-  }
-
-  /**
-   * Adds the private key material to the KeyPair.
-   * @param {object} key - A plain object.
-   * @param {string} key.privateKeyBase58 - Base58btc encoded Private Key
-   *
-   * @return {object} The keyNode with encoded private key material.
-   */
-  addPrivateKey({key}) {
-    key.privateKeyBase58 = this.privateKeyBase58;
-    return key;
+  export({publicKey = false, privateKey = false}) {
+    const exportedKey = super.export({publicKey, privateKey});
+    if(publicKey) {
+      exportedKey.publicKeyBase58 = this.publicKeyBase58;
+    }
+    if(privateKey) {
+      exportedKey.privateKeyBase58 = this.privateKeyBase58;
+    }
+    return exportedKey;
   }
 
   /**
