@@ -1,9 +1,10 @@
 # ed25519-verification-key-2018 Changelog
 
-## 2.1.0 - 
+## 3.0.0 - 
 
 ## Changed
-- Update to use `crypto-ld v5.0`. No public API changes from the previous v4 dep.
+- Update to use `crypto-ld v5.0`.
+- **BREAKING**: Removed helper methods `addPublicKey` and `addPrivateKey`.
 
 ## 2.0.0 - 2021-02-27
 
