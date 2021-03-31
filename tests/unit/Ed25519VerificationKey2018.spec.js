@@ -15,7 +15,14 @@ const {expect} = chai;
 const {Ed25519VerificationKey2018} = require('../../');
 
 describe('Ed25519VerificationKey2018', () => {
-  const type = 'Ed25519VerificationKey2018';
+  describe('class', () => {
+    it('should have suite and SUITE_CONTEXT properties', async () => {
+      expect(Ed25519VerificationKey2018).to.have.property('suite',
+        'Ed25519VerificationKey2018');
+      expect(Ed25519VerificationKey2018).to.have.property('SUITE_CONTEXT',
+        'https://w3id.org/security/suites/ed25519-2018/v1');
+    });
+  });
 
   describe('constructor', () => {
     it('should auto-set key.id based on controller, if present', async () => {
@@ -31,7 +38,7 @@ describe('Ed25519VerificationKey2018', () => {
     it('should error if publicKeyBase58 property is missing', async () => {
       let error;
       try {
-        new Ed25519VerificationKey2018({});
+        new Ed25519VerificationKey2018();
       } catch(e) {
         error = e;
       }
@@ -43,16 +50,30 @@ describe('Ed25519VerificationKey2018', () => {
 
   describe('export', () => {
     it('should export id, type and key material', async () => {
-      const keyPair = await Ed25519VerificationKey2018.generate({type});
-      keyPair.id = '#test-id';
+      const keyPair = await Ed25519VerificationKey2018.generate();
+      keyPair.id = 'did:ex:123#test-id';
+      keyPair.revoked = '2019-10-12T07:20:50.52Z';
       const exported = await keyPair.export({
         publicKey: true, privateKey: true
       });
 
-      expect(exported.id).to.equal('#test-id');
-      expect(exported.type).to.equal(type);
-      expect(exported).to.have.property('publicKeyBase58');
-      expect(exported).to.have.property('privateKeyBase58');
+      expect(exported).to.have.keys(
+        ['id', 'type', 'publicKeyBase58', 'privateKeyBase58', 'revoked']
+      );
+      expect(exported).to.have.property('id', 'did:ex:123#test-id');
+      expect(exported).to.have.property('type', 'Ed25519VerificationKey2018');
+      expect(exported).to.have.property('revoked', '2019-10-12T07:20:50.52Z');
+    });
+
+    it('should only export public key if specified', async () => {
+      const keyPair = await Ed25519VerificationKey2018.generate({
+        id: 'did:ex:123#test-id'
+      });
+      const exported = await keyPair.export({publicKey: true});
+
+      expect(exported).to.have.keys(['id', 'type', 'publicKeyBase58']);
+      expect(exported).to.have.property('id', 'did:ex:123#test-id');
+      expect(exported).to.have.property('type', 'Ed25519VerificationKey2018');
     });
   });
 

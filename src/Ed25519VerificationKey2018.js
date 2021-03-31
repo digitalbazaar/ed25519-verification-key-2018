@@ -26,8 +26,17 @@ class Ed25519VerificationKey2018 extends LDKeyPair {
    * > EDKey
    * Ed25519VerificationKey2018 { ...
    * @param {object} options - Options hashmap.
+   * @param {string} [id] - The key ID. If not provided, will be composed of
+   *   controller and key fingerprint as hash fragment.
+   * @param {string} controller - DID/URL of the person/entity
+   *   controlling this key.
    * @param {string} options.publicKeyBase58 - Base58btc encoded Public Key.
    * @param {string} [options.privateKeyBase58] - Base58btc Private Key.
+   * @param {string} [revoked] - Timestamp of when the key has been revoked,
+   *   in RFC3339 format. If not present, the key itself is considered not
+   *   revoked. (Note that this mechanism is slightly different than DID
+   *   Document key revocation, where a DID controller can revoke a key from
+   *   that DID by removing it from the DID Document.)
    */
   constructor(options = {}) {
     super(options);
@@ -162,14 +171,19 @@ class Ed25519VerificationKey2018 extends LDKeyPair {
     }
     const exportedKey = {
       id: this.id,
-      type: this.type,
-      controller: this.controller
+      type: this.type
     };
+    if(this.controller) {
+      exportedKey.controller = this.controller;
+    }
     if(publicKey) {
       exportedKey.publicKeyBase58 = this.publicKeyBase58;
     }
     if(privateKey) {
       exportedKey.privateKeyBase58 = this.privateKeyBase58;
+    }
+    if(this.revoked) {
+      exportedKey.revoked = this.revoked;
     }
     return exportedKey;
   }
@@ -339,8 +353,11 @@ function _isEqualBuffer(buf1, buf2) {
   }
   return true;
 }
-
+// Used by CryptoLD harness for dispatching.
 Ed25519VerificationKey2018.suite = SUITE_ID;
+// Used by CryptoLD harness's fromKeyId() method.
+Ed25519VerificationKey2018.SUITE_CONTEXT =
+  'https://w3id.org/security/suites/ed25519-2018/v1';
 
 export {
   Ed25519VerificationKey2018

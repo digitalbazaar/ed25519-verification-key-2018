@@ -1,5 +1,11 @@
 # ed25519-verification-key-2018 Changelog
 
+## 3.1.0 - 
+
+### Added
+- Add `revoked` export tests, `SUITE_CONTEXT` class property. (To support
+  `CryptoLD`'s new `fromKeyId()` method.)
+
 ## 3.0.0 - 2021-03-16
 
 ## Changed
