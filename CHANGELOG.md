@@ -4,7 +4,8 @@
 
 ### Added
 - Add `revoked` export tests, `SUITE_CONTEXT` class property. (To support
-  `CryptoLD`'s new `fromKeyId()` method.)
+  `CryptoLD`'s new `fromKeyId()` method.) Also add `requireContext` flag
+  to `export()`.
 
 ## 3.0.0 - 2021-03-16
 
