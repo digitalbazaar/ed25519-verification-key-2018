@@ -52,7 +52,9 @@ describe('Ed25519VerificationKey2018', () => {
     it('should export id, type and key material', async () => {
       const keyPair = await Ed25519VerificationKey2018.generate();
       keyPair.id = 'did:ex:123#test-id';
-      keyPair.revoked = '2019-10-12T07:20:50.52Z';
+      const pastDate = new Date(2020, 11, 17).toISOString()
+        .replace(/\.[0-9]{3}/, '');
+      keyPair.revoked = pastDate;
       const exported = await keyPair.export({
         publicKey: true, privateKey: true
       });
@@ -62,7 +64,7 @@ describe('Ed25519VerificationKey2018', () => {
       );
       expect(exported).to.have.property('id', 'did:ex:123#test-id');
       expect(exported).to.have.property('type', 'Ed25519VerificationKey2018');
-      expect(exported).to.have.property('revoked', '2019-10-12T07:20:50.52Z');
+      expect(exported).to.have.property('revoked', pastDate);
     });
 
     it('should only export public key if specified', async () => {

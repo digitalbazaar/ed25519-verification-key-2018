@@ -158,11 +158,12 @@ class Ed25519VerificationKey2018 extends LDKeyPair {
    * @param {object} [options={}] - Options hashmap.
    * @param {boolean} [options.publicKey] - Export public key material?
    * @param {boolean} [options.privateKey] - Export private key material?
+   * @param {boolean} [options.includeContext] - Include JSON-LD context?
    *
    * @returns {object} A public key object
    *   information used in verification methods by signatures.
    */
-  export({publicKey = false, privateKey = false} = {}) {
+  export({publicKey = false, privateKey = false, includeContext = false} = {}) {
     if(!(publicKey || privateKey)) {
       throw new TypeError(
         'Export requires specifying either "publicKey" or "privateKey".');
@@ -171,6 +172,9 @@ class Ed25519VerificationKey2018 extends LDKeyPair {
       id: this.id,
       type: this.type
     };
+    if(includeContext) {
+      exportedKey['@context'] = Ed25519VerificationKey2018.SUITE_CONTEXT;
+    }
     if(this.controller) {
       exportedKey.controller = this.controller;
     }
