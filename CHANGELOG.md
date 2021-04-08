@@ -1,6 +1,11 @@
 # ed25519-verification-key-2018 Changelog
 
-## 3.1.0 - 
+## 3.1.1 -
+
+### Fixed
+- Ensure `signer()` and `verifier()` objects have an `id` property (for jsigs).
+
+## 3.1.0 - 2021-04-02
 
 ### Added
 - Add `revoked` export tests, `SUITE_CONTEXT` class property. (To support
