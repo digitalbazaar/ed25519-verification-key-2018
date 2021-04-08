@@ -132,7 +132,9 @@ class Ed25519VerificationKey2018 extends LDKeyPair {
    * @returns {{sign: Function}} A signer for the json-ld block.
    */
   signer() {
-    return ed25519SignerFactory(this);
+    const signer = ed25519SignerFactory(this);
+    signer.id = this.id;
+    return signer;
   }
 
   /**
@@ -148,7 +150,9 @@ class Ed25519VerificationKey2018 extends LDKeyPair {
    * @returns {{verify: Function}} Used to verify jsonld-signatures.
    */
   verifier() {
-    return ed25519VerifierFactory(this);
+    const verifier = ed25519VerifierFactory(this);
+    verifier.id = this.id;
+    return verifier;
   }
 
   /**

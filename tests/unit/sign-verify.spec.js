@@ -9,6 +9,7 @@ const {stringToUint8Array} = require('../text-encoder.js');
 const bs58 = require('base58-universal');
 
 const keyPair = new Ed25519VerificationKey2018({
+  controller: 'did:ex:1234',
   publicKeyBase58: mockKey.publicKeyBase58,
   privateKeyBase58: mockKey.privateKeyBase58
 });
@@ -23,6 +24,10 @@ const targetSignatureBase58 = '4AbhYFuwyJd3zPbqR6HieQPdz2DWK2k926v99AegFT9bMR' +
 
 describe('sign and verify', () => {
   it('works properly', async () => {
+    signer.should.have.property('id',
+      'did:ex:1234#z6Mks8wJbzhWdmkQZgw7z2qHwaxPVnFsFmEZSXzGkLkvhMvL');
+    verifier.should.have.property('id',
+      'did:ex:1234#z6Mks8wJbzhWdmkQZgw7z2qHwaxPVnFsFmEZSXzGkLkvhMvL');
     const data = stringToUint8Array('test 1234');
     const signature = await signer.sign({data});
     bs58.encode(signature).should.equal(targetSignatureBase58);
