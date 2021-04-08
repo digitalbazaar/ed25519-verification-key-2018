@@ -1,6 +1,6 @@
 # ed25519-verification-key-2018 Changelog
 
-## 3.1.1 -
+## 3.1.1 - 2021-04-08
 
 ### Fixed
 - Ensure `signer()` and `verifier()` objects have an `id` property (for jsigs).
