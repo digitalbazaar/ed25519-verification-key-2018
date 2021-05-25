@@ -1,6 +1,7 @@
 const nodejs = (
   typeof process !== 'undefined' && process.versions && process.versions.node);
-let TextDecoder, TextEncoder;
+let TextDecoder;
+let TextEncoder;
 
 if(nodejs) {
   // Node.js TextDecoder/TextEncoder
