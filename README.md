@@ -1,4 +1,4 @@
-# Ed25519VerificationKey2018 Key Pair Library for Linked Data _(ed25519-verification-key-2018)_
+# Ed25519VerificationKey2018 Key Pair Library for Linked Data _(@digitalbazaar/ed25519-verification-key-2018)_
 
 [![Node.js CI](https://github.com/digitalbazaar/ed25519-verification-key-2018/workflows/Node.js%20CI/badge.svg)](https://github.com/digitalbazaar/ed25519-verification-key-2018/actions?query=workflow%3A%22Node.js+CI%22)
 
