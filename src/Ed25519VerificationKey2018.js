@@ -92,7 +92,7 @@ class Ed25519VerificationKey2018 extends LDKeyPair {
    */
   static async generate(options = {}) {
     let keyObject;
-    if('seed' in options) {
+    if(options.seed) {
       keyObject = await ed25519.generateKeyPairFromSeed(options.seed);
     } else {
       keyObject = await ed25519.generateKeyPair();
