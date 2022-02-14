@@ -108,7 +108,7 @@ describe('Ed25519VerificationKey2018', () => {
       let error;
       let keyPair;
       try {
-        const seed = null;
+        const seed = 'invalid-type';
         keyPair = await Ed25519VerificationKey2018.generate({seed});
       } catch(e) {
         error = e;
