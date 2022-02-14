@@ -1,5 +1,10 @@
 # ed25519-verification-key-2018 Changelog
 
+## 3.1.2 - 2022-TBD
+
+### Fixed
+- Fix if statement and test.
+
 ## 3.1.1 - 2021-04-08
 
 ### Fixed
@@ -38,7 +43,7 @@
 - This library now switches between 2 different ed25519.js files for
   key generation when in node or the browser.
 - `privateKeyDerEncode` now only accepts Uint8Arrays.
-- `publicKeyDerEncode` now only accepts Uint8Arrays. 
+- `publicKeyDerEncode` now only accepts Uint8Arrays.
 
 ## 1.1.0 - 2020-10-20
 
