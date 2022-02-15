@@ -1,9 +1,9 @@
 # ed25519-verification-key-2018 Changelog
 
-## 3.1.2 - 2022-TBD
+## 3.1.2 - 2022-02-15
 
 ### Fixed
-- Fix if statement and test.
+- Fix seed generation if statement and test.
 
 ## 3.1.1 - 2021-04-08
 
