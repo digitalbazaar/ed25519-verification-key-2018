@@ -2,7 +2,7 @@
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
 import {Ed25519VerificationKey2018} from '../../lib/index.js';
-import {mockKey} from '../mock-key.js';
+import {mockKey} from '../mock-data.js';
 import {stringToUint8Array} from '../text-encoder.js';
 import * as bs58 from 'base58-universal';
 

@@ -6,7 +6,7 @@ chai.should();
 
 import * as bs58 from 'base58-universal';
 import {base58Decode} from '../../lib/index.js';
-import {mockKey} from '../mock-key.js';
+import {mockKey} from '../mock-data.js';
 import {
   _privateKeyDerEncode, _publicKeyDerEncode
 } from '../../lib/ed25519.js';
