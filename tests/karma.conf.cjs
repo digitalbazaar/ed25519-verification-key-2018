@@ -1,9 +1,6 @@
-/*!
- * Copyright (c) 2020-2022 Digital Bazaar, Inc. All rights reserved.
- */
 module.exports = config => {
-  const bundler = process.env.BUNDLER || 'webpack';
   const frameworks = ['mocha'];
+  const preprocessors = ['webpack', 'sourcemap'];
   const files = ['unit/*.spec.js'];
   const reporters = ['mocha'];
   const browsers = ['ChromeHeadless'];
@@ -12,10 +9,6 @@ module.exports = config => {
       timeout: 2000
     }
   };
-  // main bundle preprocessors
-  const preprocessors = [];
-  preprocessors.push(bundler);
-  preprocessors.push('sourcemap');
 
   return config.set({
     frameworks,
@@ -32,14 +25,7 @@ module.exports = config => {
     },
     webpack: {
       devtool: 'inline-source-map',
-      mode: 'development',
-      node: {
-        Buffer: false,
-        crypto: false,
-        util: false,
-        bs58: false,
-        setImmediate: false
-      }
+      mode: 'development'
     }
   });
 };

@@ -1,5 +1,13 @@
 # ed25519-verification-key-2018 Changelog
 
+## 4.0.0 - 2022-xx-xx
+
+### Changed
+- **BREAKING**: Convert to module (ESM).
+- **BREAKING**: Require Node.js >=14.
+- Update dependencies.
+- Lint module.
+
 ## 3.2.0 - 2022-05-05
 
 ### Changed

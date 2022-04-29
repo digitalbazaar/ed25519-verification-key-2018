@@ -1,18 +1,16 @@
 /*!
- * Copyright (c) 2018-2019 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-const chai = require('chai');
-const bs58 = require('base58-universal');
-const mockKey = require('../mock-key.json');
-const multibase = require('multibase');
-const multicodec = require('multicodec');
+import chai from 'chai';
+import * as bs58 from 'base58-universal';
+import {mockKey} from '../mock-key.js';
+import multibase from 'multibase';
+import multicodec from 'multicodec';
 const should = chai.should();
 
 const {expect} = chai;
 
-const {Ed25519VerificationKey2018} = require('../../');
+import {Ed25519VerificationKey2018} from '../../lib/index.js';
 
 describe('Ed25519VerificationKey2018', () => {
   describe('class', () => {
