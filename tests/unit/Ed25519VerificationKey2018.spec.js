@@ -3,7 +3,7 @@
  */
 import chai from 'chai';
 import * as bs58 from 'base58-universal';
-import {mockKey} from '../mock-key.js';
+import {mockKey} from '../mock-data.js';
 import multibase from 'multibase';
 import multicodec from 'multicodec';
 const should = chai.should();
