@@ -1,17 +1,15 @@
 /*!
- * Copyright (c) 2018-2019 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-const chai = require('chai');
+import chai from 'chai';
 chai.should();
 
-const bs58 = require('base58-universal');
-const {base58Decode} = require('../../src/');
-const {_privateKeyDerEncode, _publicKeyDerEncode} =
-  require('../../src/ed25519');
-
-const mockKey = require('../mock-key.json');
+import * as bs58 from 'base58-universal';
+import {base58Decode} from '../../lib/index.js';
+import {mockKey} from '../mock-key.js';
+import {
+  _privateKeyDerEncode, _publicKeyDerEncode
+} from '../../lib/ed25519.js';
 
 const targetPrivateDerBytesBase64 =
   'MC4CAQAwBQYDK2VwBCIEICuAHzsgGqFh8BWmT1iucnc0w4mS5KfnfnaOtHG6yWuA';

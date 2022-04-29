@@ -1,12 +1,10 @@
 /*!
- * Copyright (c) 2018-2019 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-const {Ed25519VerificationKey2018} = require('../../src/main.js');
-const mockKey = require('../mock-key.json');
-const {stringToUint8Array} = require('../text-encoder.js');
-const bs58 = require('base58-universal');
+import {Ed25519VerificationKey2018} from '../../lib/index.js';
+import {mockKey} from '../mock-key.js';
+import {stringToUint8Array} from '../text-encoder.js';
+import * as bs58 from 'base58-universal';
 
 const keyPair = new Ed25519VerificationKey2018({
   controller: 'did:ex:1234',
