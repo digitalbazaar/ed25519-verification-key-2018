@@ -1,6 +1,6 @@
 # ed25519-verification-key-2018 Changelog
 
-## 3.2.0 - 2022-05-xx
+## 3.2.0 - 2022-05-05
 
 ### Changed
 - Replace underlying ed25519 implementation with `@noble/ed25519`. This
