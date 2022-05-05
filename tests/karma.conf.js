@@ -1,5 +1,6 @@
-const path = require('path');
-
+/*!
+ * Copyright (c) 2020-2022 Digital Bazaar, Inc. All rights reserved.
+ */
 module.exports = config => {
   const bundler = process.env.BUNDLER || 'webpack';
   const frameworks = ['mocha'];
@@ -38,13 +39,6 @@ module.exports = config => {
         util: false,
         bs58: false,
         setImmediate: false
-      },
-      resolve: {
-        alias: {
-          // throw an error if trying to import 'crypto'
-          // workaround for "node" feature not working in sub-dependencies
-          crypto$: path.resolve(__dirname, '..', 'no-crypto.js')
-        }
       }
     }
   });
