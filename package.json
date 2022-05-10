@@ -19,6 +19,13 @@
   "license": "BSD-3-Clause",
   "type": "module",
   "exports": "./lib/index.js",
+  "browser": {
+    "bs58": false,
+    "crypto": false,
+    "util": false,
+    "semver": false,
+    "./lib/ed25519.js": "./lib/ed25519-browser.js"
+  },
   "files": [
     "lib/*.js"
   ],
@@ -56,13 +63,6 @@
       "html",
       "text-summary"
     ]
-  },
-  "browser": {
-    "bs58": false,
-    "crypto": false,
-    "util": false,
-    "semver": false,
-    "./lib/ed25519.js": "./lib/ed25519-browser.js"
   },
   "engines": {
     "node": ">=14"
