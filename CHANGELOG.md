@@ -5,6 +5,7 @@
 ### Changed
 - **BREAKING**: Convert to module (ESM).
 - **BREAKING**: Require Node.js >=14.
+- **BREAKING**: Use `globalThis` to access `crypto`.
 - Update dependencies.
 - Lint module.
 
