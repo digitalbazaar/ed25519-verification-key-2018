@@ -20,10 +20,6 @@
   "type": "module",
   "exports": "./lib/index.js",
   "browser": {
-    "bs58": false,
-    "crypto": false,
-    "util": false,
-    "semver": false,
     "./lib/ed25519.js": "./lib/ed25519-browser.js"
   },
   "files": [
