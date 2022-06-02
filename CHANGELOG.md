@@ -1,6 +1,6 @@
 # ed25519-verification-key-2018 Changelog
 
-## 4.0.0 - 2022-xx-xx
+## 4.0.0 - 2022-06-01
 
 ### Changed
 - **BREAKING**: Convert to module (ESM).
